@@ -1,0 +1,20 @@
+const tintColor = '#2f95dc';
+export default {
+  tintColor,
+  lv1:'#2762EC',
+  lv2:'#18C034',
+  lv3:'#FEF500',
+  lv4:'#D1BB4C',
+  lv5:'#FE2A00',
+  lv6:'#731401',
+  danger:'#dc3545',
+  waning:'#ffc107',
+  success:'#28a745',
+  primary:'#2f95dc',
+  gradient1:['#81FBB8','#28C76F'],
+  gradient2:['#81FBB8','#28C76F'],
+  gradient3:['#81FBB8','#28C76F'],
+  gradient4:['#81FBB8','#28C76F'],
+  gradient5:['#81FBB8','#28C76F'],
+  gradient6:['#81FBB8','#28C76F'],
+};
