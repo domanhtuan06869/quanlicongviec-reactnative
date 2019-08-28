@@ -1,14 +1,15 @@
 import React,{useState, useEffect} from 'react';
-import { StyleSheet, Text, View, TextInput,SafeAreaView, Button ,Image,TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
+import { StyleSheet, Text, View,Alert, TextInput,SafeAreaView, Platform,Button ,Image,TouchableWithoutFeedback, KeyboardAvoidingView } from 'react-native';
 import *as firebase from 'firebase'
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 export default function Login() {
 const [username,setUserName]=useState()
 const [password,setPassWord]=useState()
-    
+const [load,setLoad] = useState(false);  
       // APi firebase
       async function  _save  (email,name) {
         await SecureStore.setItemAsync('email', email);
@@ -17,7 +18,7 @@ const [password,setPassWord]=useState()
       };
       async function  getUser() {
         const result = await axios(
-          'http://192.168.1.8:3000/users?email='+username,
+          'https://project-tuan.herokuapp.com/users?email='+username,
         );
        var key=result.data;
       
@@ -26,15 +27,17 @@ const [password,setPassWord]=useState()
       }
     async function login() {
       
-
+          setLoad(true)
     
            firebase
           .auth()
           .signInWithEmailAndPassword(username, password)
           .then(() => props.navigation.navigate('Main'),
-          createuser())
-          .catch(error => {})
-         // console.log(username+password)
+          createuser(),setLoad(false)
+          )
+          .catch(()=>alert('hgf'))
+      
+         
         }
   async   function createuser(){
       let details = {
@@ -49,7 +52,7 @@ const [password,setPassWord]=useState()
       formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('http://192.168.1.8:3000/users', {
+  fetch('https://project-tuan.herokuapp.com/users', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -67,10 +70,14 @@ const [password,setPassWord]=useState()
 
     return (
 <SafeAreaView style={styles.layout}>
+
          < KeyboardAvoidingView behavior='padding' style={styles.layout}>
+         <Spinner visible={load}
+                   color='blue'>                  
+                   </Spinner>
             <View style={styles.layout}>
               <Text style={{
-                fontSize: 50, fontWeight: 'bold', textAlign: 'center', marginTop: 10, color: 'white', textShadowColor: 'rgba(255, 255, 255, 1)',
+                fontSize: 50, fontWeight: 'bold', textAlign: 'center', marginTop:Platform.OS==='ios'?40: 25, color: 'white', textShadowColor: 'rgba(255, 255, 255, 1)',
                 textShadowOffset: { width: 2, height: 1 }, textShadowRadius: 5
               }}>WELCOME</Text>
               
@@ -85,7 +92,7 @@ const [password,setPassWord]=useState()
               </View>
              
               {/*dang nhap*/}
-              <Text style={{ backgroundColor: '#027a51',color:'#fff', width: 200, height: 40, textAlign: 'center', borderRadius:10, paddingTop: 10,marginTop:10, }}
+              <Text style={{ backgroundColor: '#058CDB',color:'#fff', width: 200, height: 40, textAlign: 'center', borderRadius:10, paddingTop: 10,marginTop:30, }}
                 onPress={()=>
                   login()
                 }>Đăng nhập</Text>
@@ -108,13 +115,14 @@ const [password,setPassWord]=useState()
 const styles = StyleSheet.create({
     layout: {
       flex: 1,
-      backgroundColor: '#212F3C',
+      backgroundColor: '#33B2FC',
       alignItems: 'center',
       justifyContent: 'center'
   
   
     },
     text: {
+      marginTop:20,
       paddingLeft: 10,
       borderRadius: 10,
       backgroundColor: '#ffff',
@@ -137,8 +145,8 @@ const styles = StyleSheet.create({
   
     },
     textinput: {
-      flex: 1,
-   marginBottom:10,
+    marginTop:Platform.OS==='ios'?130:80,
+   
       flexDirection: 'column',
       alignItems: 'flex-end',
       justifyContent: 'center',

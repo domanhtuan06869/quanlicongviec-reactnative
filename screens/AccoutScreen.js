@@ -6,7 +6,7 @@ export default function AccoutScreen(props) {
   return (
     <View style={styles.container}>
       <TouchableOpacity style={styles.avatar}>
-          <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:75,height:75,borderRadius:75,marginRight:10}}/>
+          <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:75,height:75,borderRadius:Platform.OS==='ios'?37:75,marginRight:10}}/>
           <View style={{marginTop:10,}}>
             <Text style={styles.welcome_tit}>Welcome to Dust Scan</Text>
             <Text style={styles.welcome_text}>Hello A.Jensen</Text>

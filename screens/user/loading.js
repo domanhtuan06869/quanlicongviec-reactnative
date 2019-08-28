@@ -1,5 +1,5 @@
 import React,{useEffect} from 'react';
-import {Image, StyleSheet, Text, View,Platform,} from 'react-native';
+import {Image, StyleSheet, Text, ActivityIndicator, View,Platform,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import *as firebase from 'firebase'
 
@@ -11,8 +11,9 @@ export default function Loading(props) {
       })
       return (
         <View style={styles.container}>
-            <Text>load</Text>
-        </View>
+        <Text style={{color:'#ffffff'}}>Loading</Text>
+        <ActivityIndicator size="large" />
+      </View>
       );
 }
 
@@ -21,8 +22,9 @@ export default function Loading(props) {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding:12,
-    backgroundColor: '#fff',
+    backgroundColor: '#5BC0FB',
+    justifyContent: 'center',
+    alignItems: 'center'
   },
   header:{
     justifyContent:"space-between",

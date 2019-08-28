@@ -15,7 +15,7 @@ import icon from '../config/Iconitem'
 export default function ProjectInvoled(props) {
   const {navigate} = props.navigation;
   const [loading,setLoading] = useState(true);
-  const [listproject,setListproject]=useState()
+  const [listproject,setListproject]=useState([])
 
   
 
@@ -24,7 +24,7 @@ async function getProject(){
   let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'http://192.168.1.8:3000/project/getallmenber',
+    'https://project-tuan.herokuapp.com/project/getallmenber',
   );
  //console.log(result.data)
   //console.log(email)
@@ -37,12 +37,12 @@ async function deleteprojectInvolved(idmenber){
   let email = await SecureStore.getItemAsync('email');
   let name = await SecureStore.getItemAsync('name');
   const result = await axios(
-    'http://192.168.1.8:3000/project/getonemenber?idmenber='+idmenber,
+    'https://project-tuan.herokuapp.com/project/getonemenber?idmenber='+idmenber,
   );
   const key = Object.keys(result.data).find(key => result.data[key] === email);
 
   const update = await axios(
-    'http://192.168.1.8:3000/project/editmenberid?idmenber='+idmenber+'&keyfield='+key,
+    'https://project-tuan.herokuapp.com/project/editmenberid?idmenber='+idmenber+'&keyfield='+key,
   );
   
 
@@ -95,13 +95,13 @@ props.navigation.navigate('ProjectDetail',{id:id})
             data={listproject}
             renderItem={({ item }) => (
               <View style={{backgroundColor:'#fff',marginTop:5,height: 68}}>
-                <TouchableOpacity style={{height:'100%',backgroundColor:'#fff'}} onPress={()=>{
+                <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
                   toSreenDetail(item.idproject)
                 }}
                 
                 >
-                <Text style={{backgroundColor:'#fff'}}>{item._id}</Text>
-                <Text style={{backgroundColor:'#fff'}}>{item.name}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17}}>Dự án {item._id}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item.name}</Text>
                 </TouchableOpacity>
                 </View>
             )}
@@ -120,7 +120,6 @@ props.navigation.navigate('ProjectDetail',{id:id})
             )}
             keyExtractor={item => item._id}
             itemBackgroundColor={'#ccc'}
-            rightColor={'blue'}
             backgroundColor={'#ccc'}
        
         />
@@ -137,10 +136,10 @@ ProjectInvoled.navigationOptions = props=>{
       <View style={{  justifyContent:"space-between",
       flexDirection:"row",
       backgroundColor:'#2f95dc',
-      paddingVertical:10,
+      paddingVertical:10, 
       paddingHorizontal:20,}}>
           <Ionicons onPress={()=>{props.navigation.openDrawer()}} color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-menu':'md-menu'}/>
-          <Text style={{fontSize:20,marginTop:5,color:'white',}}>ProjectInvoled</Text>
+          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Dự án liên quan</Text>
           <Ionicons style={{marginTop:5}} size={30} color={'white'} name={Platform.OS=='ios'?'ios-search':'md-search'}/>
       </View>
     ),
@@ -151,14 +150,4 @@ ProjectInvoled.navigationOptions = props=>{
 const styles = StyleSheet.create({
   
 });
-
-
-
-
-
-
-
-
-
-
 

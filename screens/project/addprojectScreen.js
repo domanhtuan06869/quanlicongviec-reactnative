@@ -102,8 +102,11 @@ export default class addprojectScreen extends React.Component {
 
 
   ///Tạo mới 1 project
-createproject= async()=>{
+async createproject(){
   this.setState({load:true})
+  setTimeout(() => {
+    this.setState({load:false})
+  },10000);
   let email = await SecureStore.getItemAsync('email');
   let details = {
     name:this.state.name,
@@ -124,7 +127,7 @@ createproject= async()=>{
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('http://192.168.1.8:3000/project', {
+  fetch('https://project-tuan.herokuapp.com/project', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -139,7 +142,7 @@ createproject= async()=>{
   
  this.getProject(id.replace('"',''))
   })
-  .catch((err) => { console.log(err); });
+  .catch((err) => { });
 }
 
 
@@ -157,7 +160,7 @@ for (let property in a) {
   formBody.push(encodedKey + "=" + encodedValue);
 }
 formBody = formBody.join("&");
-fetch('http://192.168.1.8:3000/project/menber', {
+fetch('https://project-tuan.herokuapp.com/project/menber', {
 method: 'POST',
 headers: {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -172,14 +175,16 @@ body: formBody,
 console.log(responseData)
 
 })
-.catch((err) => { console.log(err); });
+.catch((err) => { console.log(err);
+
+});
 
 }
 
 //lay gia tri id cho project
 async getProject(id){
   const result = await axios(
-    'http://192.168.1.8:3000/project/menber?id='+id,
+    'https://project-tuan.herokuapp.com/project/menber?id='+id,
   );
 
   this.createmenber(result.data._id,result.data.name)
@@ -188,15 +193,21 @@ async getProject(id){
 //bổ sung giá trị id cua project va ten project
 async editMenberProject(id,name,idproject){
   const result = await axios(
-    'http://192.168.1.8:3000/project/editmenber?id='+id+'&name='+name+'&idproject='+idproject
+    'https://project-tuan.herokuapp.com/project/editmenber?id='+id+'&name='+name+'&idproject='+idproject
   ).then(()=>{
-    this.setState({load:false})
-    this.props.navigation.push('Home')
+
   })
 
-
-
-  
+}
+addAll=()=>{
+this.createproject().then(()=>{
+  this.setState({load:false})
+  this.props.navigation.push('Home')
+}).catch(()=>{
+  setTimeout(()=>{
+    this.setState({load:false})
+  },5000)
+})
 }
 
   render() {
@@ -270,7 +281,7 @@ async editMenberProject(id,name,idproject){
 
       </View>
       </ScrollView>
-      <TouchableOpacity onPress={this.createproject} style={styles.containerview} >
+      <TouchableOpacity onPress={this.addAll} style={styles.containerview} >
           <Text style={styles.textbtn}>Tạo dự án</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>

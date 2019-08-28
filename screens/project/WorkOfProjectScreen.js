@@ -63,7 +63,7 @@ export default class WorkOfProjectScreen extends React.Component {
 
   onChangeText = (text) => {
     this.setState({ text });
-    console.log(this.state.tags)
+   // console.log(this.state.tags)
 
     const lastTyped = text.charAt(text.length - 1);
     const parseWhen = [',', ' ', ';', '\n'];
@@ -100,11 +100,12 @@ export default class WorkOfProjectScreen extends React.Component {
   }
 
 
-  ///Tạo mới 1 project
+  ///Tạo mới 1 cv moi
 creatework= async()=>{
    var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
     var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
-  //this.setState({load:true})
+   // console.log(idproject)
+  this.setState({load:true})
   let email = await SecureStore.getItemAsync('email');
   let details = {
     name:this.state.name,
@@ -126,7 +127,7 @@ creatework= async()=>{
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('http://192.168.1.8:3000/work', {
+  fetch('https://project-tuan.herokuapp.com/work', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -153,7 +154,7 @@ var a=this.state.tags.reduce(function(result, item, index, array) {
   result['a'+index] = item; //a, b, c
   return result;
 }, {})
-console.log(a)
+//console.log(a)
 let formBody = [];
 for (let property in a) {
   let encodedKey = encodeURIComponent(property);
@@ -161,7 +162,7 @@ for (let property in a) {
   formBody.push(encodedKey + "=" + encodedValue);
 }
 formBody = formBody.join("&");
-fetch('http://192.168.1.8:3000/work/workmenber', {
+fetch('https://project-tuan.herokuapp.com/work/workmenber', {
 method: 'POST',
 headers: {
   'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -172,8 +173,8 @@ body: formBody,
  
   var ret = responseData.replace('"','');
     var _id=ret
- //this.editWorkProject(_id.replace('"',''),name,idwork)
-console.log(responseData)
+ this.editWorkProject(_id.replace('"',''),name,idwork)
+//console.log(responseData)
 
 })
 .catch((err) => { console.log(err); });
@@ -182,25 +183,28 @@ console.log(responseData)
 //lay gia tri id cho project
 async getWork(id){
   const result = await axios(
-    'http://192.168.1.8:3000/work?id='+id,
+    'https://project-tuan.herokuapp.com/work?id='+id,
   );
-console.log(result.data)
+//console.log(result.data)
   this.createmenberWork(result.data._id,result.data.name)
 }
 
 //bổ sung giá trị id cua project va ten project
 async editWorkProject(id,name,idwork){
+  var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
+  var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
   const result = await axios(
-    'http://192.168.1.8:3000/work/editwork?id='+id+'&name='+name+'&idwork='+idwork
+    'https://project-tuan.herokuapp.com/work/editwork?id='+id+'&name='+name+'&idwork='+idwork+'&idproject='+idproject
   ).then(()=>{
     this.setState({load:false})
-    this.props.navigation.push('Home')
+   
+  this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
+ 
+ 
   })
-
-
-
-  
+  console.log(idproject)
 }
+
 
 
   render() {
@@ -219,9 +223,9 @@ async editWorkProject(id,name,idwork){
         
 
 
-<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='name project'></TextInput>  
+<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='tên công việc'></TextInput>  
 
- <TextInput style={styles.textinput}  onChangeText={(target) => this.setState({target})} value={this.state.target} placeholder='target'></TextInput>    
+ <TextInput style={styles.textinput}  onChangeText={(target) => this.setState({target})} value={this.state.target} placeholder='Mục tiêu công việc'></TextInput>    
 
 
 </View>

@@ -52,7 +52,7 @@ const AccoutStack = createStackNavigator(
   config
   );
   AccoutStack.navigationOptions = {
-    drawerLabel: 'task of me',
+    drawerLabel: 'Tài khoản',
     drawerIcon: ({ focused }) => (
       <TabBarIcon focused={focused} name={ Platform.OS === 'ios'? 'ios-contact': 'md-contact'}/>
     ),

@@ -10,13 +10,14 @@ import * as firebase from 'firebase';
 import * as SecureStore from 'expo-secure-store';
 import Flatlist from '../components/FlastlistProject'
 import axios from 'axios';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 
 
 export default function HomeScreen(props) {
   const {navigate} = props.navigation;
-  const [loading,setLoading] = useState(true);
-  const [listproject,setListproject]=useState()
+  const [load,setLoad] = useState(false);
+  const [listproject,setListproject]=useState([])
 
   
 
@@ -25,21 +26,49 @@ async function getProject(){
   let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'http://192.168.1.8:3000/project?email='+email,
+    'https://project-tuan.herokuapp.com/project?email='+email,
   );
  //console.log(result.data)
   //console.log(email)
   setListproject(result.data)
 
-}  
+}
+
+async function deleteproject(idproject){
+ 
+  const deleteproject = await axios(
+    'https://project-tuan.herokuapp.com/project/deleteproject?id='+idproject,
+  ).then(()=>{
+    getProject()
+  })
+  const deleteMbproject = await axios(
+    'https://project-tuan.herokuapp.com/project/deletemenberproject?idproject='+idproject,
+  );
+  const deletework = await axios(
+    'https://project-tuan.herokuapp.com/work/deletework?idproject='+idproject,
+  );
+  const deleteworkmenber = await axios(
+    'https://project-tuan.herokuapp.com/work/deletemenberwork?idproject='+idproject,
+  );
+
+}
+
   useEffect(() => {
-  getProject()
+  getProject().then(()=>{
+    setLoad(false)
+  })
   },[]);
 
+  setTimeout(()=>{
+    setLoad(false)
+  },5000)
   return (
   
     <View style={{flex:1,backgroundColor:'#ccc'}}>
-      <Flatlist listproject={listproject}  pr={props}/>
+         <Spinner visible={load}
+                   color='blue'>                  
+                   </Spinner>
+      <Flatlist listproject={listproject} deletefun={deleteproject}  pr={props} />
     </View>
   );
 }
