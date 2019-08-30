@@ -15,6 +15,7 @@ import ProjectDetailScreen from '../screens/project/ProjectDetailScreen';
 import LogoutSreen from '../screens/Logout';
 import AddprojectScreen from '../screens/project/addprojectScreen'
 import WorkOfProjectScreen from '../screens/project/WorkOfProjectScreen'
+import WorkDetailScreen from '../screens/WorkDetailScreen'
 
 
 
@@ -32,12 +33,13 @@ const HomeStack = createStackNavigator(
     Home: HomeScreen,
     Addproject:AddprojectScreen,
     ProjectDetail:ProjectDetailScreen,
-    WorkOfProject:WorkOfProjectScreen
+    WorkOfProject:WorkOfProjectScreen,
+    WorkDetail:WorkDetailScreen
   },
   config
   );
   HomeStack.navigationOptions = {
-    drawerLabel: 'Home',
+    drawerLabel: 'Trang chủ',
     drawerIcon: ({ focused }) => (
       <TabBarIcon focused={focused} name={ Platform.OS === 'ios'? 'ios-home': 'md-home'}/>
     ),
@@ -67,7 +69,7 @@ const ProjectInvolvedStack = createStackNavigator(
   config
 );
 ProjectInvolvedStack.navigationOptions = {
-  drawerLabel: 'ProjectInvolved',
+  drawerLabel: 'Dự án liên quan',
   drawerIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
   ),
@@ -81,7 +83,7 @@ const ContactStack = createStackNavigator(
 config
 );
 ContactStack.navigationOptions = {
-  drawerLabel: 'Contact Us',
+  drawerLabel: 'Tất cả công việc',
   drawerIcon: ({ focused }) => (
     <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-chatboxes' : 'md-chatboxes'} />
     ),
@@ -101,6 +103,19 @@ AboutStack.navigationOptions = {
   ),
 };
 AboutStack.path = '';
+const SearchStack = createStackNavigator(
+  {
+    About: AboutScreen,
+  },
+  config
+);
+SearchStack.navigationOptions = {
+  drawerLabel: 'Tìm kiếm',
+  drawerIcon: ({ focused }) => (
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-search' : 'md-search'} />
+  ),
+};
+SearchStack.path = '';
 
 const LogoutStack = createStackNavigator(
   {
@@ -126,7 +141,9 @@ const tabNavigator = createDrawerNavigator(
     AccoutStack,
     ProjectInvolvedStack,
     ContactStack,
+    SearchStack,
     AboutStack,
+    
     LogoutStack,
   },
   {

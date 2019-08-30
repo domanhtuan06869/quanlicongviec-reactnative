@@ -16,7 +16,7 @@ import Spinner from 'react-native-loading-spinner-overlay';
 
 export default function HomeScreen(props) {
   const {navigate} = props.navigation;
-  const [load,setLoad] = useState(false);
+  const [load,setLoad] = useState(true);
   const [listproject,setListproject]=useState([])
 
   
@@ -61,7 +61,7 @@ async function deleteproject(idproject){
 
   setTimeout(()=>{
     setLoad(false)
-  },5000)
+  },10000)
   return (
   
     <View style={{flex:1,backgroundColor:'#ccc'}}>

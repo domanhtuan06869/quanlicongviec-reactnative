@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet,Platform, Alert,Text,WebView,TouchableOpacity,FlatList,Button ,Image,TextInput} from 'react-native';
+import { View, StyleSheet,Platform,ScrollView, RefreshControl,Alert,Text,WebView,TouchableOpacity,FlatList,Button ,Image,TextInput} from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import axios from 'axios';
 
@@ -17,9 +17,13 @@ const Tasks = (props) => (
     onPress={()=>
       props.navigate.navigate('WorkOfProject',{idproject:props.idproject,nameproject:props.nameproject}) }
     >
-    <Text>Thêm công việc</Text>
+    <Text style={{color:'#fff',fontSize:17}}>Thêm công việc</Text>
 
   </TouchableOpacity>
+  <ScrollView refreshControl={ <RefreshControl
+      refreshing={props.fres}
+      onRefresh={props.setFreshing}
+    />}>
   <SwipeableFlatList
         
         data={props.listwork}
@@ -28,7 +32,7 @@ const Tasks = (props) => (
       
           <View style={{flexDirection:'column',marginLeft:10,width:'85%'}}>
             <TouchableOpacity onPress={()=>{
-              props.pr.navigation.navigate('ProjectDetail',{id:item._id,nameproject:item.name})}
+              props.navigate.navigate('WorkDetail',)}
             }>
           <Text style={styles.textname}>Công việc {item.name}</Text>
           <Text style={{height:20}}>ID :{item._id}</Text>
@@ -110,6 +114,7 @@ const Tasks = (props) => (
         contentContainerStyle={{width:'100%'}}
    
     />
+    </ScrollView>
   </View>
        
 );
@@ -144,9 +149,47 @@ const Menber = (props) => (
   </View>
 );
 
-const HumidChart = () => (
-  <View style={{flex:1,padding:10,}}>
-    <Text>Today statistics</Text>
+const Detail = () => (
+  <View style={{flex:1,flexDirection:'column',backgroundColor:'#ccc'}}>
+    <View style={{height:'35%',backgroundColor:'#57BEFB',flexDirection:'column'}}>
+      <ScrollView style={{height:'60%',backgroundColor:'#57BEFB',flexDirection:'column'}}>
+      <Text style={{fontSize:16,fontWeight:'bold',color:'#fff',marginLeft:8,marginTop:5}}>Xuất nhập khẩu Vàng</Text>
+      <Text style={{textAlign:'justify',color:'#fff',marginLeft:8,paddingRight:Platform.OS==='ios'?4:0,marginTop:5}}>Donald John Trump (sinh ngày 14 tháng 6 năm 1946) là đương kim Tổng thống Hoa Kỳ thứ 45.Trump đã hai lần chạy đua cho chức Tổng thống Hoa Kỳ. Năm 2000, ông phát động một chiến dịch thăm  dò và giành chiến thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015, thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015, thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015,,</Text>
+      </ScrollView>
+      <View style={{flexDirection:'row',width:'100%',marginTop:Platform.OS==='ios'?'5%':'1%'}}>
+      <Ionicons style={{marginLeft:10}} color={'white'} size={Platform.OS==='ios'?25:25} name={Platform.OS=='ios'?'ios-alarm':'md-alarm'}/>
+      <Text style={{color:'#fff',marginLeft:8,textAlignVertical:'top',paddingTop:3}}>Ngày tạo 20/10/2019 -> hết hạn 20/12/2010</Text>
+      </View>
+   
+    </View>
+    <View style={{height:'13%',flexDirection:'row',alignItems:'center',backgroundColor:'#fff'}}>
+      <View style={{width:'40%',height:'100%',flexDirection:'row',backgroundColor:'#BFF9D3',alignItems:'center'}}>
+      <Image source={{uri:icon.done}} style={{width:30,height:30,marginLeft:5}}></Image>
+      <Text style={{color:'#36D86E',marginLeft:8,textAlignVertical:'center',paddingTop:3,fontSize:16}}>Hoàn thành</Text>  
+      </View>
+      <View  style={{width:'60%',height:'100%',flexDirection:'row',alignItems:'center'}}>
+      <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+        <View style={{height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
+          <Text style={{color:'gray'}}>người tạo</Text>
+          <Text style={{fontSize:16}}>Leona Messi</Text>
+        </View>
+      </View>
+    </View>
+    <ScrollView style={{height:'36%',backgroundColor:'#fff',marginTop:3}}>
+    <Text style={{color:'#ccc'}}>Miêu tả chi tiết</Text>
+    <Text style={{color:'gray'}}>Barack Hussein Obama II (IPA: /bəˈɹɑk oʊˈbɑː.mə/; sinh ngày 4 tháng 8 năm 1961) là tổng thống thứ 44 của Hoa Kỳ từ năm 2009 đến năm 2017. Ông là người Mỹ gốc Phi đầu tiên được bầu vào chức vụ này. Lớn lên ở Honolulu, Hawaii, cá nhân ông thừa hưởng những nền văn hoá Phi-Âu-Á-Mỹ của thế giới từ thuở thiếu thời, Obama tốt nghiệp Viện Đại học Columbia và Trường Luật Viện Đại học Harvard, nơi ông từng là chủ tịch Harvard Law Review. Obama có thiên hướng hoạt động vì cộng đồng từ thời thanh niên và hoạt động cộng đồng tại Chicago </Text>
+
+    </ScrollView>
+    
+    <View style={{height:'16%',backgroundColor:'#fff',marginTop:3,flexDirection:'column'}}>
+      <Text style={{color:'gray'}}>Người theo dõi</Text>
+      <View style={{flexDirection:'row'}}>
+    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+    
+    </View>
+    </View>
  
   </View>
 )
@@ -154,7 +197,17 @@ const HumidChart = () => (
 
 export default class TabChartScreen extends React.Component {
 
-
+  _onRefresh (){
+    this.setState({ refreshing:true})
+    this.getWork().then(() => {
+      this.setState({ refreshing:false})
+      console.log('rrre')
+    }).catch((err)=>{
+      console.log(err)
+    });
+  
+  }
+ 
 
  
 
@@ -180,13 +233,14 @@ export default class TabChartScreen extends React.Component {
       routes: [
         { key: 'Tasks', title: 'Công việc' },
         { key: 'Menber', title: 'Thành viên' },
-        { key: 'HumidChart', title: 'Chi tiết' },
+        { key: 'Detail', title: 'Chi tiết' },
    
       ],
       itemmenber:'',
       nameproject:'',
       idproject:'',
-      datawork:[]
+      datawork:[],
+      refreshing:false
     };
     removeElement(array, element) {
       return array.filter(el => el !== element);
@@ -213,19 +267,22 @@ export default class TabChartScreen extends React.Component {
       );
           this.setState({datawork:result.data})
           
-          console.log(idproject)
+        //  console.log(idproject)
         
       }
+
+
 async componentDidMount(){
 
 this.getWork()
+
 setTimeout(() => {
   this.getMenberProject()
-},1000);
+},500);
 
 }
 
-    
+  
     render() {
       return (
       
@@ -233,9 +290,20 @@ setTimeout(() => {
       style={{width:'100%'}}
         navigationState={this.state}
         renderScene={SceneMap({
-          Tasks:()=> <Tasks listwork={this.state.datawork}  navigate={this.props.navigation} idproject={this.state.idproject} nameproject={this.state.nameproject}/>,
+          Tasks:()=> <Tasks listwork={this.state.datawork} fres={this.state.refreshing} setFreshing={()=>{
+            this.setState({ refreshing:true})
+            this.getWork().then(() => {
+              this.setState({ refreshing:false})
+              console.log('rrre')
+            }).catch((err)=>{
+              console.log(err)
+            });
+
+          }
+   
+        } navigate={this.props.navigation} idproject={this.state.idproject} nameproject={this.state.nameproject}/>,
           Menber:()=> <Menber itemmenber={this.state.itemmenber} nameproject={this.state.nameproject} idproject={this.state.idproject}/>,
-          HumidChart: HumidChart,
+          Detail:()=><Detail/>,
       
         })}
         onIndexChange={index => {this.setState({index})}}

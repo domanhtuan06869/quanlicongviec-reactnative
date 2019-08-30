@@ -5,6 +5,7 @@ const timeItem='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.c
 const descriptionItem='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fdescription.png?alt=media&token=2eb6ad59-a375-4108-a303-5d92679f912f'
 const star='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fstar.png?alt=media&token=f9c3bf13-f1a7-44c0-b20d-8a1bdb26c814'
 const error='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Ferror.png?alt=media&token=fcd694f3-b24d-4bc7-9589-a04638a249b2'
+const deletex='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fdeletex.png?alt=media&token=beba72ed-607e-4dfe-8d6d-1437ef4cab74'
 export default {
 deleteitem,
 editItem,
@@ -12,5 +13,6 @@ statusItem,
 timeItem,
 descriptionItem,
 star,
-error
+error,
+deletex
 }

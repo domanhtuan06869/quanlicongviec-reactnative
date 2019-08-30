@@ -17,6 +17,7 @@ export default function ProjectInvoled(props) {
   const [loading,setLoading] = useState(true);
   const [listproject,setListproject]=useState([])
 
+
   
 
 async function getProject(){
@@ -47,8 +48,14 @@ async function deleteprojectInvolved(idmenber){
   
 
 }  
+
+
   useEffect(() => {
-  getProject()
+    getProject()
+    const interval = setInterval(() => {
+      getProject()
+    }, 1000);
+    return () => clearInterval(interval);
   },[]);
 function searchFor(toSearch,objects) {
   var results = [];
@@ -94,21 +101,21 @@ props.navigation.navigate('ProjectDetail',{id:id})
         
             data={listproject}
             renderItem={({ item }) => (
-              <View style={{backgroundColor:'#fff',marginTop:5,height: 68}}>
+              <View style={{backgroundColor:'#fff',marginTop:3,height: 68}}>
                 <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
                   toSreenDetail(item.idproject)
                 }}
                 
                 >
-                <Text style={{backgroundColor:'#fff',fontSize:17}}>Dự án {item._id}</Text>
-                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item.name}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17,color:'red',fontWeight:'bold'}}>Dự án {item.name}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item.idproject}</Text>
                 </TouchableOpacity>
                 </View>
             )}
          
         
             renderRight={({ item }) => (
-            <View  style={{ width: 70 ,height:68,flexDirection:'row',marginTop:5,backgroundColor:'green',alignItems:'center'}}>
+            <View  style={{ width: 70 ,height:68,flexDirection:'row',marginTop:3,alignItems:'center'}}>
                <TouchableOpacity onPress={()=>{
                       deleteprojectInvolved(item._id).then(()=>{
                         getProject()

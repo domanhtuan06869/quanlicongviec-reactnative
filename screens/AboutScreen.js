@@ -2,47 +2,25 @@ import React from 'react';
 import {Image, StyleSheet, Text, View,Platform,TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/Colors';
+import icon from './Iconitem'
 export default function AboutScreen(props) {
   return (
     <View style={styles.container}>
       <View style={[styles.list_admin]}>
         <TouchableOpacity style={[styles.admin]}>
-          <Image source={{uri:'https://i.pravatar.cc/300?5555'}} style={{width:60,height:60,borderRadius:60,marginRight:15}}/>
+          <Image source={{uri:icon.anh}} style={{width:90,height:90,borderRadius:30,marginRight:15}}/>
           <View>
-            <Text>Name: Vũ Thế Quân</Text>
-            <Text>Age: 20</Text>
+            <Text>Name: Đỗ Mạnh Tuân</Text>
+            <Text>Age: 22</Text>
             <Text>Phone: 0353003430</Text>
           </View>
         </TouchableOpacity>
-        <TouchableOpacity style={[styles.admin]}>
-          <Image source={{uri:'https://i.pravatar.cc/300?5552'}} style={{width:60,height:60,borderRadius:60,marginRight:15}}/>
-          <View>
-            <Text>Name: Nguyễn Thế Việt</Text>
-            <Text>Age: 23</Text>
-            <Text>Phone: 0353003430</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.admin]}>
-          <Image source={{uri:'https://i.pravatar.cc/300?5557'}} style={{width:60,height:60,borderRadius:60,marginRight:15}}/>
-          <View>
-            <Text>Name: Nguyễn Tuấn Trung</Text>
-            <Text>Age: 26</Text>
-            <Text>Phone: 0353003430</Text>
-          </View>
-        </TouchableOpacity>
-        <TouchableOpacity style={[styles.admin]}>
-          <Image source={{uri:'https://i.pravatar.cc/300?5553'}} style={{width:60,height:60,borderRadius:60,marginRight:15}}/>
-          <View>
-            <Text>Name: Lê Trường Giang</Text>
-            <Text>Age: 21</Text>
-            <Text>Phone: 0353003430</Text>
-          </View>
-        </TouchableOpacity>
+      
       </View>
       <View style={{alignItems:"center"}}>
         <Text style={[styles.text_about,{fontWeight:"bold",color:colors.tintColor}]}>Version: 1.0.0</Text>
-        <Text style={[styles.text_about]}>Copyright © 2019 By Dust Team</Text>
-        <Text style={[styles.text_about]}>Email: Dustteam@gmail.com</Text>
+        <Text style={[styles.text_about]}>Copyright © 2019  Team</Text>
+        <Text style={[styles.text_about]}>Email: Tuan@gmail.com</Text>
       </View>
     </View>
   );

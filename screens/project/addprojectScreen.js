@@ -33,7 +33,7 @@ export default class addprojectScreen extends React.Component {
       paddingVertical:10,
       paddingHorizontal:20,}}>
           <Ionicons onPress={()=>{navigation.goBack()}} color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-arrow-back':'md-arrow-back'}/>
-          <Text style={{fontSize:20,marginTop:5,color:'white',}}>SETTING</Text>
+          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Thêm dự án</Text>
           <Ionicons style={{marginTop:5}} size={30} color={'white'} name={Platform.OS=='ios'?'ios-search':'md-search'}/>
       </View>
     ),
@@ -41,7 +41,7 @@ export default class addprojectScreen extends React.Component {
 
 
   state = {
-    tags: ['dmt@gmail.com','ahq@gmail.com'],
+    tags: ['tt@gmail.com','tuan@gmail.com'],
     objectTags:{},
     text: "",
     horizontalTags: [],
@@ -78,7 +78,6 @@ export default class addprojectScreen extends React.Component {
   }
 
   labelExtractor = (tag) => tag;
-
   onChangeHorizontalTags = (horizontalTags) => {
     this.setState({
       horizontalTags,
@@ -99,7 +98,6 @@ export default class addprojectScreen extends React.Component {
       this._horizontalTagInput.scrollToEnd();
     }
   }
-
 
   ///Tạo mới 1 project
 async createproject(){
@@ -218,7 +216,7 @@ this.createproject().then(()=>{
                    color='blue'>                  
                    </Spinner>
                    <ScrollView style={{width:'100%'}}>
-      <View style={{ width:'100%', marginTop: 30 }}>
+      <View style={{ width:'100%', marginTop: 30,paddingBottom:40 }}>
       
         
         <View style={{flexDirection:'column',width:'100%',alignItems:'center'}}>
@@ -226,11 +224,11 @@ this.createproject().then(()=>{
         
 
 
-<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='name project'></TextInput>  
+<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='Tên dự án'></TextInput>  
 
- <TextInput style={styles.textinput}  onChangeText={(company) => this.setState({company})} value={this.state.company} placeholder='company'></TextInput>    
+ <TextInput style={styles.textinput}  onChangeText={(company) => this.setState({company})} value={this.state.company} placeholder='Tên công ty'></TextInput>    
 
-<TextInput style={styles.textinput}  onChangeText={(desire) => this.setState({desire})} value={this.state.desire} placeholder='desire'></TextInput>
+<TextInput style={styles.textinput}  onChangeText={(desire) => this.setState({desire})} value={this.state.desire} placeholder='Mong muốn'></TextInput>
 
 </View>
        
@@ -261,7 +259,7 @@ this.createproject().then(()=>{
       onValueChange={(value) => this.setState({status:value})}
       placeholder={{
         label: 'Chọn trạng thái...',
-        value: null,
+        value: null,color:'black'
     }}
       items={[
         { label: 'Đang làm', value: 'Đang làm' ,color:'black'},
@@ -271,18 +269,18 @@ this.createproject().then(()=>{
     />
     </View>
        <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endday) => this.setState({endday})} value={this.state.endday} keyboardType='numeric' placeholder='Ngay'></TextInput>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endmonth) => this.setState({endmonth})} value={this.state.endmonth} keyboardType='numeric' placeholder='thang'></TextInput>
-       <TextInput style={styles.textinputnumbeyear}  onChangeText={(endyear) => this.setState({endyear})} value={this.state.endyear} keyboardType='numeric' placeholder='nam'></TextInput>
+       <TextInput style={styles.textinputnumber}  onChangeText={(endday) => this.setState({endday})} value={this.state.endday} keyboardType='numeric' placeholder='Ngày'></TextInput>
+       <TextInput style={styles.textinputnumber}  onChangeText={(endmonth) => this.setState({endmonth})} value={this.state.endmonth} keyboardType='numeric' placeholder='Tháng'></TextInput>
+       <TextInput style={styles.textinputnumbeyear}  onChangeText={(endyear) => this.setState({endyear})} value={this.state.endyear} keyboardType='numeric' placeholder='Năm'></TextInput>
 
 
        </View>
-  <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='description'></TextInput>
+  <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
 
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.addAll} style={styles.containerview} >
-          <Text style={styles.textbtn}>Tạo dự án</Text>
+          <Text style={styles.textbtn}>TẠO DỰ ÁN</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );
@@ -311,6 +309,6 @@ containerview:{
   width:'100%',alignItems:'center',borderRadius:4,height:45,justifyContent:'center'
 },
 textbtn:{
- width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:15,
+ width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:15,fontSize:17
 }
 })

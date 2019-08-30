@@ -223,7 +223,7 @@ async editWorkProject(id,name,idwork){
         
 
 
-<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='tên công việc'></TextInput>  
+<TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='Tên công việc'></TextInput>  
 
  <TextInput style={styles.textinput}  onChangeText={(target) => this.setState({target})} value={this.state.target} placeholder='Mục tiêu công việc'></TextInput>    
 
@@ -267,9 +267,9 @@ async editWorkProject(id,name,idwork){
     />
     </View>
        <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endday) => this.setState({endday})} value={this.state.endday} keyboardType='numeric' placeholder='Ngay'></TextInput>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endmonth) => this.setState({endmonth})} value={this.state.endmonth} keyboardType='numeric' placeholder='thang'></TextInput>
-       <TextInput style={styles.textinputnumbeyear}  onChangeText={(endyear) => this.setState({endyear})} value={this.state.endyear} keyboardType='numeric' placeholder='nam'></TextInput>
+       <TextInput style={styles.textinputnumber}  onChangeText={(endday) => this.setState({endday})} value={this.state.endday} keyboardType='numeric' placeholder='Ngày'></TextInput>
+       <TextInput style={styles.textinputnumber}  onChangeText={(endmonth) => this.setState({endmonth})} value={this.state.endmonth} keyboardType='numeric' placeholder='Tháng'></TextInput>
+       <TextInput style={styles.textinputnumbeyear}  onChangeText={(endyear) => this.setState({endyear})} value={this.state.endyear} keyboardType='numeric' placeholder='Năm'></TextInput>
 
 
        </View>
@@ -278,7 +278,7 @@ async editWorkProject(id,name,idwork){
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.creatework} style={styles.containerview} >
-          <Text style={styles.textbtn}>Tạo dự án</Text>
+          <Text style={styles.textbtn}>TẠO CÔNG VIỆC</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );
@@ -307,6 +307,6 @@ containerview:{
   width:'100%',alignItems:'center',borderRadius:4,height:45,justifyContent:'center'
 },
 textbtn:{
- width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:15,
+ width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:15,fontSize:17
 }
 })

@@ -6,7 +6,7 @@ import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 
 
-export default function Login() {
+export default function Login(props) {
 const [username,setUserName]=useState()
 const [password,setPassWord]=useState()
 const [load,setLoad] = useState(false);  
@@ -35,7 +35,13 @@ const [load,setLoad] = useState(false);
           .then(() => props.navigation.navigate('Main'),
           createuser(),setLoad(false)
           )
-          .catch(()=>alert('hgf'))
+          .catch(err=>
+            {
+              if(err){
+               Alert.alert('Kiểm tra lại tài khoản')
+              }
+            }
+          )
       
          
         }
