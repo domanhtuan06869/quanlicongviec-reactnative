@@ -23,7 +23,7 @@ export default function FlastlistProject(props)  {
         
         data={props.listproject}
         renderItem={({ item }) => (
-          <View  style={{backgroundColor:'#fff',marginTop:2 ,minHeight:139,flexDirection:'row'}}>
+          <View  style={{backgroundColor:'#fff',marginTop:1 ,minHeight:139,flexDirection:'row'}}>
       
           <View style={{flexDirection:'column',marginLeft:10,width:'85%'}}>
             <TouchableOpacity onPress={()=>{
@@ -65,7 +65,7 @@ export default function FlastlistProject(props)  {
      
     
       renderRight={({ item }) => (
-        <View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#fff',marginTop:2,justifyContent:'center',alignItems:'center'}}>
+        <View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#fff',marginTop:1,justifyContent:'center',alignItems:'center'}}>
            <TouchableOpacity  onPress={()=>{
               alert('edt')
            }} style={styles.btnopacity1}>

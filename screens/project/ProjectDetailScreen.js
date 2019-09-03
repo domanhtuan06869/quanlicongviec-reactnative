@@ -20,7 +20,7 @@ const Tasks = (props) => (
     <Text style={{color:'#fff',fontSize:17}}>Thêm công việc</Text>
 
   </TouchableOpacity>
-  <ScrollView refreshControl={ <RefreshControl
+  <ScrollView style={{backgroundColor:'#ccc'}} refreshControl={ <RefreshControl
       refreshing={props.fres}
       onRefresh={props.setFreshing}
     />}>
@@ -72,7 +72,7 @@ const Tasks = (props) => (
         renderRight={({ item }) => (
 
 
-<View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#fff',marginTop:1,justifyContent:'center',alignItems:'center'}}>
+<View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#ccc',marginTop:1,justifyContent:'center',alignItems:'center'}}>
            <TouchableOpacity  onPress={()=>{
               alert('edt')
            }} style={styles.btnopacity1}>
@@ -123,7 +123,7 @@ const Menber = (props) => (
   
   <View style={{width:'100%'}}>
     <View style={{flexDirection:'column', height:60,backgroundColor:'#87CFF9',alignItems:'center',justifyContent:'center'}}>
-    <Text style={{fontSize:17}}>ID : {props.idproject}</Text>
+    <Text style={{fontSize:17,color:'red'}}>ID : {props.idproject}</Text>
       <Text style={{fontSize:17}}>Dự án {props.nameproject}</Text>
     </View>
     <View style={{backgroundColor:'#CCC',width:'100%'}}>
@@ -135,7 +135,7 @@ const Menber = (props) => (
        // data={Object.values(obj)}
        data={props.itemmenber}
          renderItem={({item}) =>
-         <View style={{backgroundColor:'#fff',marginTop:2,width:'100%'}}>
+         <View style={{backgroundColor:'#fff',marginTop:1,width:'100%'}}>
       
            <Text style={{height:Platform.OS==='ios' ?40:35,width:'100%',textAlign:'center',paddingTop:Platform.OS==='ios' ?10:6,textAlignVertical:'center'}}>{item}</Text>
 
@@ -182,11 +182,13 @@ const Detail = () => (
     </ScrollView>
     
     <View style={{height:'16%',backgroundColor:'#fff',marginTop:3,flexDirection:'column'}}>
-      <Text style={{color:'gray'}}>Người theo dõi</Text>
+      <Text style={{color:'gray'}}>Đánh giá</Text>
       <View style={{flexDirection:'row'}}>
-    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
-    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
-    <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+    <Image source={{uri:icon.star1}} style={{width:40,height:40,marginLeft:10}}/>
+    <Image source={{uri:icon.star1}} style={{width:40,height:50,marginLeft:15}}/>
+    <Image source={{uri:icon.star1}} style={{width:40,height:40,marginLeft:15}}/>
+    <Image source={{uri:icon.star1}} style={{width:40,height:50,marginLeft:15}}/>
+    <Image source={{uri:icon.star1}} style={{width:40,height:40,marginLeft:15}}/>
     
     </View>
     </View>
@@ -221,7 +223,7 @@ export default class TabChartScreen extends React.Component {
       paddingVertical:10,
       paddingHorizontal:20,}}>
           <Ionicons onPress={()=>{navigation.goBack()}} color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-arrow-back':'md-arrow-back'}/>
-          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Detail</Text>
+          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Chi tiết dự án</Text>
           <Text></Text>
       </View>
     ),
@@ -252,13 +254,9 @@ export default class TabChartScreen extends React.Component {
         'https://project-tuan.herokuapp.com/project/getonemenberproject?idproject='+idproject
       );
     //console.log(result.data)
-    var removeidmenber=this.removeElement(Object.values(result.data),result.data._id)
-    var removeIdproject=this.removeElement(removeidmenber,idproject)
-    var removeNameproject=this.removeElement(removeIdproject,result.data.name)
-    console.log(removeNameproject)
-    this.setState({idproject:result.data.idproject,nameproject:result.data.name})
+    //this.setState({idproject:result.data.idproject,nameproject:result.data.name})
  
-    this.setState({itemmenber:removeNameproject})
+    this.setState({itemmenber:result.data})
     }
     async getWork(){
       var idproject=this.props.navigation.getParam('id', 'NO-NAME');

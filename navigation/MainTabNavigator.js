@@ -71,7 +71,7 @@ const ProjectInvolvedStack = createStackNavigator(
 ProjectInvolvedStack.navigationOptions = {
   drawerLabel: 'Dự án liên quan',
   drawerIcon: ({ focused }) => (
-    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-options' : 'md-options'} />
+    <TabBarIcon focused={focused} name={Platform.OS === 'ios' ? 'ios-business' : 'md-business'} />
   ),
 };
 ProjectInvolvedStack.path = '';

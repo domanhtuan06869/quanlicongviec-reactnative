@@ -107,8 +107,15 @@ async createproject(){
   },10000);
   let email = await SecureStore.getItemAsync('email');
   let details = {
-    name:'do manh tuan code',
-    email:this.state.tags
+    name:this.state.name,
+    email:email,
+    company:this.state.company,
+    desire:this.state.desire,
+    endday:this.state.endday,
+    endmonth:this.state.endmonth,
+    endyear:this.state.endyear,
+    status:this.state.status,
+    description:this.state.description,
    
   }
   let formBody = [];
@@ -118,7 +125,7 @@ async createproject(){
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('http://192.168.1.8:3000/work/test', {
+  fetch('https://project-tuan.herokuapp.com/project', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -126,7 +133,12 @@ async createproject(){
   body: formBody,
   }).then((response) => response.text())
   .then((responseData) => {
-
+    var ret = responseData.replace('"','');
+    var id=ret
+   // console.log(id.replace('"',''));
+  
+  
+ this.getProject(id.replace('"',''))
   })
   .catch((err) => { });
 }
@@ -186,7 +198,14 @@ async editMenberProject(id,name,idproject){
 
 }
  addAll=()=>{
-this.createproject()
+this.createproject().then(()=>{
+  this.setState({load:false})
+  this.props.navigation.push('Home')
+}).catch(()=>{
+  setTimeout(()=>{
+    this.setState({load:false})
+  },5000)
+})
 }
 
   render() {

@@ -109,6 +109,7 @@ async createproject(){
   let details = {
     name:this.state.name,
     email:email,
+    emailtag:this.state.tags,
     company:this.state.company,
     desire:this.state.desire,
     endday:this.state.endday,
@@ -133,12 +134,12 @@ async createproject(){
   body: formBody,
   }).then((response) => response.text())
   .then((responseData) => {
-    var ret = responseData.replace('"','');
-    var id=ret
+   // var ret = responseData.replace('"','');
+  //  var id=ret
    // console.log(id.replace('"',''));
   
   
- this.getProject(id.replace('"',''))
+ //this.getProject(id.replace('"',''))
   })
   .catch((err) => { });
 }
@@ -197,7 +198,7 @@ async editMenberProject(id,name,idproject){
   })
 
 }
-addAll=()=>{
+ addAll=()=>{
 this.createproject().then(()=>{
   this.setState({load:false})
   this.props.navigation.push('Home')

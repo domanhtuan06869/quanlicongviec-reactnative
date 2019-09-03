@@ -7,7 +7,7 @@ export default function AccoutScreen(props) {
     const [heightlayout,setHeightlayout]=useState(0)
     const [heightdefault,setHeightdefault]=useState(27)
     const [iconlist,setIconlist]=useState(icon.arrowright)
-    const [pdbt,setpadding]=useState(100)
+    const [pdbt,setpadding]=useState(120)
     
  function onLayout(event) {
     const {x, y, height, width} = event.nativeEvent.layout;
@@ -70,23 +70,23 @@ export default function AccoutScreen(props) {
        
         <View style={{padding:10}} onLayout={(event) => onLayout(event)} >
            <View style={{flexDirection:'row',width:'100%'}}>
-           <Text style={{width:'90%'}}>Công việc nhỏ</Text>
+           <Text style={{width:'92%'}}>Công việc nhỏ</Text>
            <Image style={{width:20,height:20}} source={{uri:icon.deletex}}></Image>
            </View>
            <View style={{flexDirection:'row',width:'100%',marginTop:4}}>
-           <Text style={{width:'90%'}}>Công việc nhỏ</Text>
+           <Text style={{width:'92%'}}>Công việc nhỏ</Text>
            <Image style={{width:20,height:20}} source={{uri:icon.deletex}}></Image>
            </View>
            <View style={{flexDirection:'row',width:'100%',marginTop:4}}>
-           <Text style={{width:'90%'}}>Công việc nhỏ</Text>
+           <Text style={{width:'92%'}}>Công việc nhỏ</Text>
            <Image style={{width:20,height:20}} source={{uri:icon.deletex}}></Image>
            </View>
            <View style={{flexDirection:'row',width:'100%',marginTop:4}}>
-           <Text style={{width:'90%'}}>Công việc nhỏ</Text>
+           <Text style={{width:'92%'}}>Công việc nhỏ</Text>
            <Image style={{width:20,height:20}} source={{uri:icon.deletex}}></Image>
            </View>
            <View style={{flexDirection:'row',width:'100%',marginTop:4}}>
-           <Text style={{width:'90%'}}>Công việc nhỏ</Text>
+           <Text style={{width:'92%'}}>Công việc nhỏ</Text>
            <Image style={{width:20,height:20}} source={{uri:icon.deletex}}></Image>
            </View>
         </View>
@@ -121,10 +121,10 @@ export default function AccoutScreen(props) {
     </View>
     </View>
     </ScrollView>
-    <View style={{backgroundColor:'#fff', height: 55,flexDirection:'row',alignItems:'center'}}>
-    <TextInput style={{width:'85%',  borderColor: 'gray', borderWidth: 1,marginTop:4,marginLeft:2,
+    <View style={{backgroundColor:'#fff', height: 55,flexDirection:'row',alignItems:'center',borderTopColor:'gray',borderTopWidth:0.5}}>
+    <TextInput style={{width:'85%',  borderColor: 'gray', borderWidth: 0.3,marginTop:4,marginLeft:5,
      height: 45,}} placeholder='  Bình luận'></TextInput>
-      <Image style={{width:35,height:30}}
+      <Image style={{width:35,height:30,marginLeft:5}}
       source={{uri:'https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fsend-256.png?alt=media&token=5933f2ab-aaf1-4478-9d7d-715fc28746ab'}}>
 
       </Image>
@@ -138,8 +138,8 @@ AccoutScreen.navigationOptions = props=>{
   return{
   header:(
     <View style={styles.header}>
-        <Ionicons onPress={()=>{props.navigation.openDrawer()}} color={'white'} size={35} name={Platform.OS=='ios'?'ios-menu':'md-menu'}/>
-        <Text style={{fontSize:20,marginTop:5,color:'white',}}>Công Việc</Text>
+        <Ionicons onPress={()=>{props.navigation.goBack()}}  color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-arrow-back':'md-arrow-back'}/>
+        <Text style={{fontSize:20,marginTop:5,color:'white',}}>Chi tiết công việc</Text>
         <Ionicons style={{marginTop:5}} size={30} color={'white'} name={Platform.OS=='ios'?'ios-search':'md-add'}/>
     </View>
   ),

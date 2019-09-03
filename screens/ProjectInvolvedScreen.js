@@ -101,7 +101,7 @@ props.navigation.navigate('ProjectDetail',{id:id})
         
             data={listproject}
             renderItem={({ item }) => (
-              <View style={{backgroundColor:'#fff',marginTop:3,height: 68}}>
+              <View style={{backgroundColor:'#fff',marginTop:1,height: 68}}>
                 <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
                   toSreenDetail(item.idproject)
                 }}
@@ -115,7 +115,7 @@ props.navigation.navigate('ProjectDetail',{id:id})
          
         
             renderRight={({ item }) => (
-            <View  style={{ width: 70 ,height:68,flexDirection:'row',marginTop:3,alignItems:'center'}}>
+            <View  style={{ width: 70 ,height:68,flexDirection:'row',marginTop:1,alignItems:'center'}}>
                <TouchableOpacity onPress={()=>{
                       deleteprojectInvolved(item._id).then(()=>{
                         getProject()

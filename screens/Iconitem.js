@@ -11,6 +11,7 @@ const dropdow='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.co
 const arrowright ='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Farrow_right-256.png?alt=media&token=d5d1970c-8020-47c6-af54-95a126920585'
 const anh='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fanhcuat.png?alt=media&token=41faae03-fa7c-4c40-8957-05b3f64b6317'
 const plus='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fplus-256.png?alt=media&token=87e813f4-8200-4d52-8dc1-b3eeb4b7bcb3'
+const star1 ='https://firebasestorage.googleapis.com/v0/b/test-8ca79.appspot.com/o/icon%2Fstar-256.png?alt=media&token=e2f8721d-06aa-4a90-8f91-dcd47ce2c5ba'
 export default {
 deleteitem,
 editItem,
@@ -24,5 +25,6 @@ deletex,
 dropdow,
 arrowright,
 anh,
-plus
+plus,
+star1
 }
