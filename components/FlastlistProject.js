@@ -7,29 +7,32 @@ import {
   ScrollView,
   StyleSheet,
   Text,Alert,
-  View,FlatList, RefreshControl,TouchableOpacity
+  View,FlatList,Button, TextInput,RefreshControl,TouchableOpacity
 
 } from 'react-native';
 import icon from '../config/Iconitem'
-
+import Modal from "react-native-modal";
 import {SwipeableFlatList} from 'react-native-swipeable-flat-list';
-
+import { Dimensions } from 'react-native';
+import TagInput from 'react-native-tag-input';
 export default function FlastlistProject(props)  {
 
+  const [id,setId]=useState('')
 
           return(
             <View  style={{flex:1}}>
+                
                   <SwipeableFlatList
         
         data={props.listproject}
         renderItem={({ item }) => (
           <View  style={{backgroundColor:'#fff',marginTop:1 ,minHeight:139,flexDirection:'row'}}>
-      
+   
           <View style={{flexDirection:'column',marginLeft:10,width:'85%'}}>
             <TouchableOpacity onPress={()=>{
               props.pr.navigation.navigate('ProjectDetail',{id:item._id,nameproject:item.name})}
             }>
-          <Text style={styles.textname}>Dự án {item.name}</Text>
+          <Text style={styles.textname}>Dự án {Platform.OS==='android'? item.name.slice(0, 18): item.name.slice(0, 25)}..</Text>
           <Text style={{height:20}}>ID :{item._id}</Text>
 
 
@@ -43,7 +46,7 @@ export default function FlastlistProject(props)  {
           </View>
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.descriptionItem}}   style={{width:23,height:23}}></Image>
-          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.description}</Text>
+          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.description.slice(0, 25)}...</Text>
           </View>
         
           
@@ -66,9 +69,10 @@ export default function FlastlistProject(props)  {
     
       renderRight={({ item }) => (
         <View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#fff',marginTop:1,justifyContent:'center',alignItems:'center'}}>
-           <TouchableOpacity  onPress={()=>{
-              alert('edt')
-           }} style={styles.btnopacity1}>
+           <TouchableOpacity  onPress={()=> {
+            props.pr.navigation.navigate('EditProject',{ listtag:item.emailtag,name:item.name,id:item._id,description:item.description,desire:item.desire,company:item.company,endday:item.endday,endmonth:item.endmonth,endyear:item.endyear,status:item.status})
+           }
+           } style={styles.btnopacity1}>
             <Image style={{width:25,height:25,marginLeft:3}} source={{uri:icon.editItem}}></Image>
            </TouchableOpacity>
           <TouchableOpacity onPress={()=>{ 

@@ -135,10 +135,14 @@ const Menber = (props) => (
        // data={Object.values(obj)}
        data={props.itemmenber}
          renderItem={({item}) =>
-         <View style={{backgroundColor:'#fff',marginTop:1,width:'100%'}}>
-      
-           <Text style={{height:Platform.OS==='ios' ?40:35,width:'100%',textAlign:'center',paddingTop:Platform.OS==='ios' ?10:6,textAlignVertical:'center'}}>{item}</Text>
-
+         <View style={{backgroundColor:'#fff',marginTop:1,width:'100%',flexDirection:'column'}}>
+           <View style={{width:'100%', flexDirection:'row'}}>
+             
+           <Text style={{height:Platform.OS==='ios' ?40:35,width:'90%',paddingLeft:40,paddingTop:Platform.OS==='ios' ?10:6,textAlignVertical:'center'}}>{item}</Text>
+           <TouchableOpacity onPress={()=>{alert(item)}} style={{paddingTop:Platform.OS==='ios' ?10:6,}}>
+             <Image style={{width:20,height:20,}} source={{uri:icon.deletex}}></Image>
+           </TouchableOpacity>
+             </View>
 
      </View>
                 }
@@ -149,35 +153,35 @@ const Menber = (props) => (
   </View>
 );
 
-const Detail = () => (
+const Detail = (props) => (
   <View style={{flex:1,flexDirection:'column',backgroundColor:'#ccc'}}>
     <View style={{height:'35%',backgroundColor:'#57BEFB',flexDirection:'column'}}>
       <ScrollView style={{height:'60%',backgroundColor:'#57BEFB',flexDirection:'column'}}>
-      <Text style={{fontSize:16,fontWeight:'bold',color:'#fff',marginLeft:8,marginTop:5}}>Xuất nhập khẩu Vàng</Text>
-      <Text style={{textAlign:'justify',color:'#fff',marginLeft:8,paddingRight:Platform.OS==='ios'?4:0,marginTop:5}}>Donald John Trump (sinh ngày 14 tháng 6 năm 1946) là đương kim Tổng thống Hoa Kỳ thứ 45.Trump đã hai lần chạy đua cho chức Tổng thống Hoa Kỳ. Năm 2000, ông phát động một chiến dịch thăm  dò và giành chiến thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015, thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015, thắng ở hai cuộc bầu cử sơ bộ của Đảng Cải cách. Tháng 6 năm 2015,,</Text>
+      <Text style={{fontSize:16,fontWeight:'bold',color:'#fff',marginLeft:8,marginTop:5}}>{props.nameproject}</Text>
+      <Text style={{textAlign:'justify',color:'#fff',marginLeft:8,paddingRight:Platform.OS==='ios'?4:0,marginTop:5}}>{props.desire}</Text>
       </ScrollView>
       <View style={{flexDirection:'row',width:'100%',marginTop:Platform.OS==='ios'?'5%':'1%'}}>
       <Ionicons style={{marginLeft:10}} color={'white'} size={Platform.OS==='ios'?25:25} name={Platform.OS=='ios'?'ios-alarm':'md-alarm'}/>
-      <Text style={{color:'#fff',marginLeft:8,textAlignVertical:'top',paddingTop:3}}>Ngày tạo 20/10/2019 -> hết hạn 20/12/2010</Text>
+      <Text style={{color:'#fff',marginLeft:8,textAlignVertical:'top',paddingTop:3}}>{props.start} -> hết hạn 20/12/2010</Text>
       </View>
    
     </View>
     <View style={{height:'13%',flexDirection:'row',alignItems:'center',backgroundColor:'#fff'}}>
-      <View style={{width:'40%',height:'100%',flexDirection:'row',backgroundColor:'#BFF9D3',alignItems:'center'}}>
+      <View style={{width:'40%',height:'100%',flexDirection:'row',backgroundColor:props.status==='Đang làm'?'#BFF9D3':'yellow',alignItems:'center'}}>
       <Image source={{uri:icon.done}} style={{width:30,height:30,marginLeft:5}}></Image>
-      <Text style={{color:'#36D86E',marginLeft:8,textAlignVertical:'center',paddingTop:3,fontSize:16}}>Hoàn thành</Text>  
+      <Text style={{color:'#36D86E',marginLeft:8,textAlignVertical:'center',paddingTop:3,fontSize:16}}>{props.status}</Text>  
       </View>
       <View  style={{width:'60%',height:'100%',flexDirection:'row',alignItems:'center'}}>
       <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
         <View style={{height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
           <Text style={{color:'gray'}}>người tạo</Text>
-          <Text style={{fontSize:16}}>Leona Messi</Text>
+          <Text style={{fontSize:16}}>{props.email}</Text>
         </View>
       </View>
     </View>
     <ScrollView style={{height:'36%',backgroundColor:'#fff',marginTop:3}}>
     <Text style={{color:'#ccc'}}>Miêu tả chi tiết</Text>
-    <Text style={{color:'gray'}}>Barack Hussein Obama II (IPA: /bəˈɹɑk oʊˈbɑː.mə/; sinh ngày 4 tháng 8 năm 1961) là tổng thống thứ 44 của Hoa Kỳ từ năm 2009 đến năm 2017. Ông là người Mỹ gốc Phi đầu tiên được bầu vào chức vụ này. Lớn lên ở Honolulu, Hawaii, cá nhân ông thừa hưởng những nền văn hoá Phi-Âu-Á-Mỹ của thế giới từ thuở thiếu thời, Obama tốt nghiệp Viện Đại học Columbia và Trường Luật Viện Đại học Harvard, nơi ông từng là chủ tịch Harvard Law Review. Obama có thiên hướng hoạt động vì cộng đồng từ thời thanh niên và hoạt động cộng đồng tại Chicago </Text>
+    <Text style={{color:'gray'}}>{props.description} </Text>
 
     </ScrollView>
     
@@ -239,14 +243,21 @@ export default class TabChartScreen extends React.Component {
    
       ],
       itemmenber:'',
-      nameproject:'',
-      idproject:'',
+      nameproject:this.props.navigation.getParam('nameproject', 'NO-NAME'),
+      idproject: this.props.navigation.getParam('id', 'NO-NAME'),
       datawork:[],
-      refreshing:false
+      refreshing:false,
+      nameproject:null,
+      company:'',
+      desire:'',
+      email:'',
+      start:'',
+      end:'',
+      status:'',
+      description:''
+
     };
-    removeElement(array, element) {
-      return array.filter(el => el !== element);
-    }
+
    
     async getMenberProject(){
       var idproject=this.props.navigation.getParam('id', 'NO-NAME');
@@ -265,13 +276,22 @@ export default class TabChartScreen extends React.Component {
       );
           this.setState({datawork:result.data})
           
-        //  console.log(idproject)
+        // console.log(idproject)
         
+      }
+      async getProject() {
+      var idproject=this.props.navigation.getParam('id', 'NO-NAME');
+        
+        const result = await axios(
+          'http://192.168.1.5:3000/project/getoneproject?id='+idproject
+        );
+        console.log(result.data)
+        this.setState({nameproject:result.data.name,start:result.data.starttime,status:result.data.status,desire:result.data.desire,description:result.data.description})
       }
 
 
 async componentDidMount(){
-
+this.getProject()
 this.getWork()
 
 setTimeout(() => {
@@ -301,7 +321,7 @@ setTimeout(() => {
    
         } navigate={this.props.navigation} idproject={this.state.idproject} nameproject={this.state.nameproject}/>,
           Menber:()=> <Menber itemmenber={this.state.itemmenber} nameproject={this.state.nameproject} idproject={this.state.idproject}/>,
-          Detail:()=><Detail/>,
+          Detail:()=><Detail  nameproject={this.state.nameproject} desire={this.state.desire} start={this.state.start} end={this.state.end} status={this.state.status} description={this.state.description} email={this.state.email} />,
       
         })}
         onIndexChange={index => {this.setState({index})}}

@@ -41,7 +41,7 @@ export default class WorkOfProjectScreen extends React.Component {
 
 
   state = {
-    tags: ['dmt@gmail.com','ahq@gmail.com'],
+    tags: ['dmt@gmail.com','tuan@gmail.com'],
     objectTags:{},
     text: "",
     horizontalTags: [],
@@ -105,11 +105,15 @@ creatework= async()=>{
    var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
     var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
    // console.log(idproject)
+   setTimeout(() => {
+    this.setState({load:false})
+   }, 5000);
   this.setState({load:true})
   let email = await SecureStore.getItemAsync('email');
   let details = {
     name:this.state.name,
     email:email,
+    emailtag:this.state.tags,
     target:this.state.target,
     endday:this.state.endday,
     endmonth:this.state.endmonth,
@@ -133,77 +137,21 @@ creatework= async()=>{
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   },
   body: formBody,
-  }).then((response) => response.text())
+  }).then((response) => 
+  {
+    this.setState({load:false})
+    this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
+  
+  }
+  )
   .then((responseData) => {
-    var ret = responseData.replace('"','');
-    var id=ret
-   // console.log(id.replace('"',''));
-  
-  
- this.getWork(id.replace('"',''))
+
  
   })
   .catch((err) => { console.log(err); });
 }
 
 
-//tao moi thanh vien tham gia du an
- async createmenberWork(idwork,name){
-
-var a=this.state.tags.reduce(function(result, item, index, array) {
-  result['a'+index] = item; //a, b, c
-  return result;
-}, {})
-//console.log(a)
-let formBody = [];
-for (let property in a) {
-  let encodedKey = encodeURIComponent(property);
-  let encodedValue = encodeURIComponent(a[property]);
-  formBody.push(encodedKey + "=" + encodedValue);
-}
-formBody = formBody.join("&");
-fetch('https://project-tuan.herokuapp.com/work/workmenber', {
-method: 'POST',
-headers: {
-  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-},
-body: formBody,
-}).then((response) => response.text())
-.then((responseData) => {
- 
-  var ret = responseData.replace('"','');
-    var _id=ret
- this.editWorkProject(_id.replace('"',''),name,idwork)
-//console.log(responseData)
-
-})
-.catch((err) => { console.log(err); });
-
-}
-//lay gia tri id cho project
-async getWork(id){
-  const result = await axios(
-    'https://project-tuan.herokuapp.com/work?id='+id,
-  );
-//console.log(result.data)
-  this.createmenberWork(result.data._id,result.data.name)
-}
-
-//bổ sung giá trị id cua project va ten project
-async editWorkProject(id,name,idwork){
-  var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
-  var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
-  const result = await axios(
-    'https://project-tuan.herokuapp.com/work/editwork?id='+id+'&name='+name+'&idwork='+idwork+'&idproject='+idproject
-  ).then(()=>{
-    this.setState({load:false})
-   
-  this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
- 
- 
-  })
-  console.log(idproject)
-}
 
 
 

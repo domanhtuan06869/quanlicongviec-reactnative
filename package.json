@@ -39,11 +39,13 @@
     "react-native-picker-select": "^6.3.1",
     "react-native-reanimated": "^1.1.0",
     "react-native-simple-dialogs": "^1.2.0",
+    "react-native-socket.io-client": "^1.4.8",
     "react-native-swipeable-flat-list": "^0.1.1",
     "react-native-tab-view": "^2.10.0",
     "react-native-tag-input": "0.0.21",
     "react-native-web": "^0.11.4",
-    "react-navigation": "^3.11.0"
+    "react-navigation": "^3.11.0",
+    "socket.io-client": "^2.2.0"
   },
   "devDependencies": {
     "babel-preset-expo": "^6.0.0",

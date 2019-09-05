@@ -41,19 +41,20 @@ export default class addprojectScreen extends React.Component {
 
 
   state = {
-    tags: ['tt@gmail.com','tuan@gmail.com'],
+    tags:  this.props.navigation.getParam('listtag', []),
     objectTags:{},
     text: "",
     horizontalTags: [],
     horizontalText: "",
-    name:'',
-    status:'',
-    desire:'',
-    description:'',
-    endday:'',
-    endmonth:'',
-    endyear:'',
-    company:'',
+    id:this.props.navigation.getParam('id', ''),
+    name:this.props.navigation.getParam('name', ''),
+    status:this.props.navigation.getParam('status', ''),
+    desire:this.props.navigation.getParam('desire', ''),
+    description:this.props.navigation.getParam('description', ''),
+    endday:this.props.navigation.getParam('endday','').toString(),
+    endmonth:  this.props.navigation.getParam('endmonth', '').toString(),
+    endyear:this.props.navigation.getParam('endyear', '').toString(),
+    company:  this.props.navigation.getParam('company', ''),
     load:false
   };
 
@@ -107,8 +108,10 @@ async createproject(){
   },10000);
   let email = await SecureStore.getItemAsync('email');
   let details = {
+    id:this.state.id,
     name:this.state.name,
     email:email,
+    emailtag:this.state.tags,
     company:this.state.company,
     desire:this.state.desire,
     endday:this.state.endday,
@@ -125,7 +128,7 @@ async createproject(){
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('https://project-tuan.herokuapp.com/project', {
+  fetch('http://192.168.1.5:3000/project/editproject', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -133,70 +136,14 @@ async createproject(){
   body: formBody,
   }).then((response) => response.text())
   .then((responseData) => {
-    var ret = responseData.replace('"','');
-    var id=ret
-   // console.log(id.replace('"',''));
-  
-  
- this.getProject(id.replace('"',''))
+ 
   })
   .catch((err) => { });
 }
 
 
-//tao moi thanh vien tham gia du an
- async createmenber(idproject,name){
 
-var a=this.state.tags.reduce(function(result, item, index, array) {
-  result['a'+index] = item; //a, b, c
-  return result;
-}, {})
-let formBody = [];
-for (let property in a) {
-  let encodedKey = encodeURIComponent(property);
-  let encodedValue = encodeURIComponent(a[property]);
-  formBody.push(encodedKey + "=" + encodedValue);
-}
-formBody = formBody.join("&");
-fetch('https://project-tuan.herokuapp.com/project/menber', {
-method: 'POST',
-headers: {
-  'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-},
-body: formBody,
-}).then((response) => response.text())
-.then((responseData) => {
- 
-  var ret = responseData.replace('"','');
-    var _id=ret
- this.editMenberProject(_id.replace('"',''),name,idproject)
-console.log(responseData)
 
-})
-.catch((err) => { console.log(err);
-
-});
-
-}
-
-//lay gia tri id cho project
-async getProject(id){
-  const result = await axios(
-    'https://project-tuan.herokuapp.com/project/menber?id='+id,
-  );
-
-  this.createmenber(result.data._id,result.data.name)
-}
-
-//bổ sung giá trị id cua project va ten project
-async editMenberProject(id,name,idproject){
-  const result = await axios(
-    'https://project-tuan.herokuapp.com/project/editmenber?id='+id+'&name='+name+'&idproject='+idproject
-  ).then(()=>{
-
-  })
-
-}
  addAll=()=>{
 this.createproject().then(()=>{
   this.setState({load:false})
@@ -207,7 +154,9 @@ this.createproject().then(()=>{
   },5000)
 })
 }
+componentDidMount(){
 
+}
   render() {
 
     return (
@@ -257,10 +206,12 @@ this.createproject().then(()=>{
         color='black'
         style={{color:'black'}}
       onValueChange={(value) => this.setState({status:value})}
+      
       placeholder={{
         label: 'Chọn trạng thái...',
         value: null,color:'black'
     }}
+   
       items={[
         { label: 'Đang làm', value: 'Đang làm' ,color:'black'},
         { label: 'Hoàn Thành', value: 'Hoàn Thành' },
@@ -280,7 +231,7 @@ this.createproject().then(()=>{
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.addAll} style={styles.containerview} >
-          <Text style={styles.textbtn}>TẠO DỰ ÁN</Text>
+          <Text style={styles.textbtn}>Sửa dự án</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );

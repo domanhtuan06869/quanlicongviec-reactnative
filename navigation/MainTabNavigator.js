@@ -16,7 +16,7 @@ import LogoutSreen from '../screens/Logout';
 import AddprojectScreen from '../screens/project/addprojectScreen'
 import WorkOfProjectScreen from '../screens/project/WorkOfProjectScreen'
 import WorkDetailScreen from '../screens/WorkDetailScreen'
-
+import EditProjectScreen from '../screens/project/EditProjectScreen'
 
 
 
@@ -34,7 +34,8 @@ const HomeStack = createStackNavigator(
     Addproject:AddprojectScreen,
     ProjectDetail:ProjectDetailScreen,
     WorkOfProject:WorkOfProjectScreen,
-    WorkDetail:WorkDetailScreen
+    WorkDetail:WorkDetailScreen,
+    EditProject:EditProjectScreen
   },
   config
   );

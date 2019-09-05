@@ -3,21 +3,22 @@ import {Image, StyleSheet, Text,FlatList, View,Platform,TouchableOpacity} from '
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/Colors';
 import axios from 'axios';
+import * as SecureStore from 'expo-secure-store';
 
 export default function ContactScreen(props) {
   const[listworkmenber,setListworkmenber]=useState([])
   async function getWorkMenber(){
 
-  //let email = await SecureStore.getItemAsync('email');
+  let email = await SecureStore.getItemAsync('email');
  // let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'http://192.168.1.8:3000/work/getallmenber',
+    'http://192.168.1.5:3000/work/getworkwithmenber?email='+email,
   );
  console.log(result.data)
   //console.log(email)
  setListworkmenber(result.data)
-// setListproject(searchFor(email,result.data))
+
 
   }
 
@@ -27,39 +28,10 @@ getWorkMenber()
 },[])
 
 
-  function searchFor(toSearch,objects) {
-    var results = [];
-    toSearch = trimString(toSearch); // trim it
-    for(var i=0; i<objects.length; i++) {
-      for(var key in objects[i]) {
-        if(objects[i][key].indexOf(toSearch)!=-1) {
-          if(!itemExists(results, objects[i])) results.push(objects[i]);
-        }
-      }
-    }
-    return results;
-  }
-  
-  function trimString(s) {
-    var l=0, r=s.length -1;
-    while(l < s.length && s[l] == ' ') l++;
-    while(r > l && s[r] == ' ') r-=1;
-    return s.substring(l, r+1);
-  }
-  
-  function compareObjects(o1, o2) {
-    var k = '';
-    for(k in o1) if(o1[k] != o2[k]) return false;
-    for(k in o2) if(o1[k] != o2[k]) return false;
-    return true;
-  }
-  
-  function itemExists(haystack, needle) {
-    for(var i=0; i<haystack.length; i++) if(compareObjects(haystack[i], needle)) return true;
-    return false;
-  }
+
   return (
     <View style={styles.container}>
+
             <FlatList
           contentContainerStyle={{
         width:'100%'
@@ -82,7 +54,7 @@ getWorkMenber()
               
             </View>
 
-                                        </View>
+              </View>
           }
           keyExtractor={item => item.id}
         />

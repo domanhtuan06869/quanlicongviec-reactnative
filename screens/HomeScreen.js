@@ -11,7 +11,7 @@ import * as SecureStore from 'expo-secure-store';
 import Flatlist from '../components/FlastlistProject'
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import Modal from "react-native-modal";
 
 
 export default function HomeScreen(props) {
@@ -41,15 +41,11 @@ async function deleteproject(idproject){
   ).then(()=>{
     getProject()
   })
-  const deleteMbproject = await axios(
-    'https://project-tuan.herokuapp.com/project/deletemenberproject?idproject='+idproject,
-  );
+
   const deletework = await axios(
     'https://project-tuan.herokuapp.com/work/deletework?idproject='+idproject,
   );
-  const deleteworkmenber = await axios(
-    'https://project-tuan.herokuapp.com/work/deletemenberwork?idproject='+idproject,
-  );
+
 
 }
 
@@ -62,13 +58,17 @@ async function deleteproject(idproject){
   setTimeout(()=>{
     setLoad(false)
   },10000)
+
+  
   return (
   
     <View style={{flex:1,backgroundColor:'#ccc'}}>
-         <Spinner visible={load}
+     
+         <Spinner visible={false}
                    color='blue'>                  
                    </Spinner>
-      <Flatlist listproject={listproject} deletefun={deleteproject}  pr={props} />
+      <Flatlist listproject={listproject} deletefun={deleteproject}  pr={props} setMd={()=>setLoadmd(true)} />
+ 
     </View>
   );
 }

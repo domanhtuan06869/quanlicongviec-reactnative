@@ -25,25 +25,20 @@ async function getProject(){
   let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'https://project-tuan.herokuapp.com/project/getallmenber',
+    'https://project-tuan.herokuapp.com/project/getprojectwithmenber?email='+email,
   );
- //console.log(result.data)
+ console.log(result.data)
   //console.log(email)
  // setListproject(result.data)
- setListproject(searchFor(email,result.data))
+ setListproject(result.data)
   
 
 }  
-async function deleteprojectInvolved(idmenber){
+async function deleteprojectInvolved(idproject){
   let email = await SecureStore.getItemAsync('email');
   let name = await SecureStore.getItemAsync('name');
-  const result = await axios(
-    'https://project-tuan.herokuapp.com/project/getonemenber?idmenber='+idmenber,
-  );
-  const key = Object.keys(result.data).find(key => result.data[key] === email);
-
   const update = await axios(
-    'https://project-tuan.herokuapp.com/project/editmenberid?idmenber='+idmenber+'&keyfield='+key,
+    'https://project-tuan.herokuapp.com/project/deletemenberproject?idproject='+idproject+'&email='+email,
   );
   
 
@@ -54,7 +49,7 @@ async function deleteprojectInvolved(idmenber){
     getProject()
     const interval = setInterval(() => {
       getProject()
-    }, 1000);
+    }, 10000);
     return () => clearInterval(interval);
   },[]);
 function searchFor(toSearch,objects) {
@@ -103,12 +98,12 @@ props.navigation.navigate('ProjectDetail',{id:id})
             renderItem={({ item }) => (
               <View style={{backgroundColor:'#fff',marginTop:1,height: 68}}>
                 <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
-                  toSreenDetail(item.idproject)
+                  toSreenDetail(item._id)
                 }}
                 
                 >
                 <Text style={{backgroundColor:'#fff',fontSize:17,color:'red',fontWeight:'bold'}}>Dự án {item.name}</Text>
-                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item.idproject}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item._id}</Text>
                 </TouchableOpacity>
                 </View>
             )}
