@@ -17,6 +17,7 @@ import AddprojectScreen from '../screens/project/addprojectScreen'
 import WorkOfProjectScreen from '../screens/project/WorkOfProjectScreen'
 import WorkDetailScreen from '../screens/WorkDetailScreen'
 import EditProjectScreen from '../screens/project/EditProjectScreen'
+import TestS from '../screens/TestScreen'
 
 
 
@@ -47,6 +48,21 @@ const HomeStack = createStackNavigator(
     
   };
   HomeStack.path = '';
+  const Test = createStackNavigator(
+    {
+      Testsc: TestS,
+
+    },
+    config
+    );
+    Test.navigationOptions = {
+      drawerLabel: 'Tét',
+      drawerIcon: ({ focused }) => (
+        <TabBarIcon focused={focused} name={ Platform.OS === 'ios'? 'ios-home': 'md-home'}/>
+      ),
+      
+    };
+    Test.path = '';
 
 const AccoutStack = createStackNavigator(
   {
@@ -144,7 +160,6 @@ const tabNavigator = createDrawerNavigator(
     ContactStack,
     SearchStack,
     AboutStack,
-    
     LogoutStack,
   },
   {

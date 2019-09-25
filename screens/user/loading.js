@@ -2,12 +2,19 @@ import React,{useEffect} from 'react';
 import {Image, StyleSheet, Text, ActivityIndicator, View,Platform,} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import *as firebase from 'firebase'
+import * as SecureStore from 'expo-secure-store';
 
 export default function Loading(props) {
+  async function load() {
+   let email= await SecureStore.getItemAsync('email');
+  
+    props.navigation.navigate(email==='null' ? 'Login' : 'Main')
+   
+  }
     useEffect(()=>{
-        firebase.auth().onAuthStateChanged(user => {
-            props.navigation.navigate(user ? 'Main' : 'Login')
-          })
+        
+        load()   
+        
       })
       return (
         <View style={styles.container}>

@@ -3,76 +3,68 @@ import { StyleSheet, Text, View,Alert, TextInput,SafeAreaView, Platform,Button ,
 import *as firebase from 'firebase'
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
+import url from '../url'
 import Spinner from 'react-native-loading-spinner-overlay';
-
+import { initnotify, getToken, notify ,newChannel } from 'expo-push-notification-helper';
 
 export default function Login(props) {
-const [username,setUserName]=useState()
-const [password,setPassWord]=useState()
+const [username,setUserName]=useState('tuan@gmail.com')
+const [password,setPassWord]=useState('ass')
 const [load,setLoad] = useState(false);  
       // APi firebase
-      async function  _save  (email,name) {
+     async function  _save  (email,name) {
         await SecureStore.setItemAsync('email', email);
         await SecureStore.setItemAsync('name', name);
+        let emaillogin= await SecureStore.getItemAsync('email');
+        if(emaillogin!='null'){
+          props.navigation.navigate('Main')
+          setLoad(false)
+        }
+        
        
       };
       async function  getUser() {
-        const result = await axios(
-          'https://project-tuan.herokuapp.com/users?email='+username,
-        );
-       var key=result.data;
-      
-       _save(key.email,key.name)
+        initnotify().then( async(data)=>{
+
+          if(data){
+                console.log(await getToken());
+                var token=await getToken()
+
+                const postData = {                                
+                  username:username,
+                  password:password,
+                  token:token
+                   };
+                   let axiosConfig = {
+                    headers: {
+                      'Content-Type' : 'application/json; charset=UTF-8',
+                      'Accept': 'Token',
+                      "Access-Control-Allow-Origin": "*",
+                    }
+                  };
+                  
+                  axios({
+                        method: 'post',
+                        url:  url.url+'/users/login',
+                        headers: axiosConfig,
+                        data: postData
+                    })
+                    .then((res) => {
+                      _save(res.data.email,res.data.email)
+                    }).catch(err=>{
+                      console.log(err)
+                    })
+                  
+                  
+    
+            }else{
+              alert('please grant this app notification permission in settings.')}
+            })
+    
 
       }
-    async function login() {
-      
-          setLoad(true)
-    
-           firebase
-          .auth()
-          .signInWithEmailAndPassword(username, password)
-          .then(() => props.navigation.navigate('Main'),
-          createuser(),setLoad(false)
-          )
-          .catch(err=>
-            {
-              if(err){
-               Alert.alert('Kiểm tra lại tài khoản')
-              }
-            }
-          )
-      
-         
-        }
-  async   function createuser(){
-      let details = {
-        email:username,
-
- 
-    };
-    let formBody = [];
-    for (let property in details) {
-      let encodedKey = encodeURIComponent(property);
-      let encodedValue = encodeURIComponent(details[property]);
-      formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
-  fetch('https://project-tuan.herokuapp.com/users', {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-    },
-    body: formBody,
-  }).then((response) => response.text())
-   .then((responseData) => {
- getUser()
-  })
-   .catch((err) => { console.log(err); });
-
-}
-     
-
+   async function login() {
+      getUser()   }
 
     return (
 <SafeAreaView style={styles.layout}>
@@ -92,8 +84,8 @@ const [load,setLoad] = useState(false);
       
                   {/*nhap du lieu dang nhap*/}
               <View style={styles.textinput}>
-                <TextInput style={styles.text}  onChangeText={(user) => setUserName(user.toLocaleLowerCase())} placeholder='Email'></TextInput>
-                <TextInput style={styles.text} 	secureTextEntry={true} onChangeText={(password) => setPassWord( password )} placeholder='Mật khẩu'></TextInput>
+                <TextInput style={styles.text} value={username} onChangeText={(user) => setUserName(user.toLocaleLowerCase())} placeholder='Email'></TextInput>
+                <TextInput style={styles.text}  value={password}	secureTextEntry={true} onChangeText={(password) => setPassWord( password )} placeholder='Mật khẩu'></TextInput>
           
               </View>
              

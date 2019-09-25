@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { View, StyleSheet,Platform,ScrollView, RefreshControl,Alert,Text,WebView,TouchableOpacity,FlatList,Button ,Image,TextInput} from 'react-native';
+import { View, StyleSheet,Platform,ScrollView, RefreshControl,Alert,Text,AlertIOS,TouchableOpacity,FlatList,Button ,Image,TextInput} from 'react-native';
 import { TabView, SceneMap } from 'react-native-tab-view';
 import axios from 'axios';
 
@@ -7,7 +7,7 @@ import { Ionicons } from '@expo/vector-icons';
 import {SwipeableFlatList} from 'react-native-swipeable-flat-list';
 import { Dialog, ProgressDialog, ConfirmDialog,} from "react-native-simple-dialogs";
 import icon from '../Iconitem'
-
+import url from '../url'
 const Tasks = (props) => (
 
  
@@ -15,7 +15,7 @@ const Tasks = (props) => (
  
     <TouchableOpacity style={{width:'100%',height:'8%',alignItems:'center',justifyContent:'center',backgroundColor:'red'}}
     onPress={()=>
-      props.navigate.navigate('WorkOfProject',{idproject:props.idproject,nameproject:props.nameproject}) }
+      props.navigate.navigate('WorkOfProject',{idproject:props.idproject,nameproject:props.nameproject,emailtag:props.emailtag}) }
     >
     <Text style={{color:'#fff',fontSize:17}}>Thêm công việc</Text>
 
@@ -32,23 +32,23 @@ const Tasks = (props) => (
       
           <View style={{flexDirection:'column',marginLeft:10,width:'85%'}}>
             <TouchableOpacity onPress={()=>{
-              props.navigate.navigate('WorkDetail',)}
+              props.navigate.navigate('WorkDetail',{idwork:item.id})}
             }>
-          <Text style={styles.textname}>Công việc {item.name}</Text>
-          <Text style={{height:20}}>ID :{item._id}</Text>
+          <Text style={styles.textname}>Công việc {item.tencongviec}</Text>
+          <Text style={{height:20}}>ID :{item.id}</Text>
 
 
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.statusItem}}   style={{width:24,height:24}}></Image>
-          <Text style={{marginLeft:3,padding:4}}>Trạng thái :{item.status}</Text>
+          <Text style={{marginLeft:3,padding:4}}>Trạng thái :{item.trangthai}</Text>
           </View>
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.timeItem}}   style={{width:25,height:25}}></Image>
-          <Text style={{marginLeft:3,padding:3}}>Kết thúc:{item.endday}-{item.endmonth}</Text>
+          <Text style={{marginLeft:3,padding:3}}>:{new Date(item.thoigianstart).toLocaleDateString()}->{new Date(item.thoigianend).toLocaleDateString()}</Text>
           </View>
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.descriptionItem}}   style={{width:23,height:23}}></Image>
-          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.description}</Text>
+          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.mota}</Text>
           </View>
         
           
@@ -107,7 +107,7 @@ const Tasks = (props) => (
           
      
         )}
-        keyExtractor={item => item._id}
+        keyExtractor={item => item.id}
         itemBackgroundColor={'#ccc'}
         rightColor={'blue'}
         backgroundColor={'#ccc'}
@@ -138,15 +138,30 @@ const Menber = (props) => (
          <View style={{backgroundColor:'#fff',marginTop:1,width:'100%',flexDirection:'column'}}>
            <View style={{width:'100%', flexDirection:'row'}}>
              
-           <Text style={{height:Platform.OS==='ios' ?40:35,width:'90%',paddingLeft:40,paddingTop:Platform.OS==='ios' ?10:6,textAlignVertical:'center'}}>{item}</Text>
-           <TouchableOpacity onPress={()=>{alert(item)}} style={{paddingTop:Platform.OS==='ios' ?10:6,}}>
+           <Text style={{height:Platform.OS==='ios' ?40:35,width:'90%',paddingLeft:40,paddingTop:Platform.OS==='ios' ?10:6,textAlignVertical:'center'}}>{item.emailtag}</Text>
+           <TouchableOpacity onPress={()=>{ Alert.alert(
+              '',
+              'bạn muốn xóa không ?',
+              [
+                  
+                  {
+                      text: 'Cancel',
+                      style: 'cancel',
+                  }, {
+                      text: 'OK',
+                      onPress: () =>  {  props.delete(item)
+                      }
+                  }
+              ]
+            )
+            }} style={{paddingTop:Platform.OS==='ios' ?10:6,}}>
              <Image style={{width:20,height:20,}} source={{uri:icon.deletex}}></Image>
            </TouchableOpacity>
              </View>
 
      </View>
                 }
-    keyExtractor={item => item}
+    keyExtractor={item => item.emailtag}
     />
     <Text style={{backgroundColor:'gray',height:0.4}}/>
     </View>
@@ -215,9 +230,7 @@ export default class TabChartScreen extends React.Component {
   }
  
 
- 
 
-  
 
   static navigationOptions = ({ navigation }) => ({
     header:(
@@ -254,39 +267,55 @@ export default class TabChartScreen extends React.Component {
       start:'',
       end:'',
       status:'',
-      description:''
+      description:'',
+      emailtag:null
 
     };
+ deleteemail= async(email) =>{
+
+ const result = await axios(
+    'https://project-tuan.herokuapp.com/project/deletemenberproject?idproject='+this.state.idproject+'&email='+email,
+  ).then(()=>{
+    this.getMenberProject()
+  })
+}
 
    
     async getMenberProject(){
       var idproject=this.props.navigation.getParam('id', 'NO-NAME');
       const result = await axios(
-        'https://project-tuan.herokuapp.com/project/getonemenberproject?idproject='+idproject
+        url.url+'/project/getmenberprojectsql?idproject='+idproject
+        /*'https://project-tuan.herokuapp.com/project/getonemenberproject?idproject='+idproject*/
       );
-    //console.log(result.data)
-    //this.setState({idproject:result.data.idproject,nameproject:result.data.name})
+      const emailtag = await axios(
+        url.url+'/project/getoneemailtagduan?idproject='+idproject
+  
+      );
+     // console.log(emailtag.data)
+      this.setState({emailtag:emailtag.data})
  
     this.setState({itemmenber:result.data})
     }
     async getWork(){
       var idproject=this.props.navigation.getParam('id', 'NO-NAME');
       const result = await axios(
-        'https://project-tuan.herokuapp.com/work/getall?idproject='+idproject
+        url.url+'/work/getworksql?idproject='+idproject
+       /* 'https://project-tuan.herokuapp.com/work/getall?idproject='+idproject*/
       );
           this.setState({datawork:result.data})
           
-        // console.log(idproject)
+    
         
       }
       async getProject() {
       var idproject=this.props.navigation.getParam('id', 'NO-NAME');
         
         const result = await axios(
-          'http://192.168.1.5:3000/project/getoneproject?id='+idproject
+          url.url+'/project/getoneduanwithid?idproject='+idproject
+         /* 'https://project-tuan.herokuapp.com/project/getoneproject?id='+idproject*/
         );
-        console.log(result.data)
-        this.setState({nameproject:result.data.name,start:result.data.starttime,status:result.data.status,desire:result.data.desire,description:result.data.description})
+       console.log(result.data)
+        this.setState({nameproject:result.data.tenduan,start:result.data.starttime,status:result.data.trangthai,desire:result.data.mongmuon,description:result.data.mota,email:result.data.email})
       }
 
 
@@ -296,7 +325,7 @@ this.getWork()
 
 setTimeout(() => {
   this.getMenberProject()
-},500);
+},300);
 
 }
 
@@ -308,7 +337,7 @@ setTimeout(() => {
       style={{width:'100%'}}
         navigationState={this.state}
         renderScene={SceneMap({
-          Tasks:()=> <Tasks listwork={this.state.datawork} fres={this.state.refreshing} setFreshing={()=>{
+          Tasks:()=> <Tasks listwork={this.state.datawork} emailtag={this.state.emailtag} fres={this.state.refreshing} setFreshing={()=>{
             this.setState({ refreshing:true})
             this.getWork().then(() => {
               this.setState({ refreshing:false})
@@ -320,8 +349,8 @@ setTimeout(() => {
           }
    
         } navigate={this.props.navigation} idproject={this.state.idproject} nameproject={this.state.nameproject}/>,
-          Menber:()=> <Menber itemmenber={this.state.itemmenber} nameproject={this.state.nameproject} idproject={this.state.idproject}/>,
-          Detail:()=><Detail  nameproject={this.state.nameproject} desire={this.state.desire} start={this.state.start} end={this.state.end} status={this.state.status} description={this.state.description} email={this.state.email} />,
+          Menber:()=> <Menber delete={this.deleteemail} itemmenber={this.state.itemmenber} nameproject={this.state.nameproject} idproject={this.state.idproject}/>,
+          Detail:()=><Detail  nameproject={this.state.nameproject}  desire={this.state.desire} start={this.state.start} end={this.state.end} status={this.state.status} description={this.state.description} email={this.state.email} />,
       
         })}
         onIndexChange={index => {this.setState({index})}}

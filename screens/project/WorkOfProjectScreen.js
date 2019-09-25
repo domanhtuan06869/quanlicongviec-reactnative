@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {
   Text,
   View,Button,StyleSheet,
-  Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView
+  Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,TouchableHighlight
 } from 'react-native';
 import TagInput from 'react-native-tag-input';
 import { Ionicons } from '@expo/vector-icons';
@@ -10,6 +10,10 @@ import RNPickerSelect from 'react-native-picker-select';
 import * as SecureStore from 'expo-secure-store';
 import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
+import DateTimePicker from "react-native-modal-datetime-picker";
+import AutoTags from 'react-native-tag-autocomplete';
+import url from '../url'
+
 
 const inputProps = {
  // keyboardType: 'default',
@@ -52,76 +56,139 @@ export default class WorkOfProjectScreen extends React.Component {
     description:'',
     endday:'',
     endmonth:'',
-    endyear:'',
-    load:false
+    date:'',
+    load:false,
+    isDateTimePickerVisible: false,
+    isDateTimePickerVisible2: false,
+    starttime:'',
+    endtime:'',
+    id:'',
+    suggestions :this.props.navigation.getParam('emailtag','rong'),
+    tagsSelected : [],
+    layoutpd:0
+
   };
 
-  onChangeTags = (tags) => {
-    this.setState({ tags });
-  
-  }
-
-  onChangeText = (text) => {
-    this.setState({ text });
-   // console.log(this.state.tags)
-
-    const lastTyped = text.charAt(text.length - 1);
-    const parseWhen = [',', ' ', ';', '\n'];
-
-    if (parseWhen.indexOf(lastTyped) > -1) {
-      this.setState({
-        tags: [...this.state.tags, this.state.text],
-        text: "",
-      });
-    }
-  }
-
-  labelExtractor = (tag) => tag;
-
-  onChangeHorizontalTags = (horizontalTags) => {
-    this.setState({
-      horizontalTags,
+  customFilterData = query => {
+    //override suggestion filter, we can search by specific attributes
+    query = query.toUpperCase();
+    let searchResults = this.state.suggestions.filter(s => {
+      return (
+     
+        s.emailtag.toUpperCase().includes(query)
+      );
     });
+    return searchResults;
   };
 
-  onChangeHorizontalText = (horizontalText) => {
-    this.setState({ horizontalText });
+  customRenderTags = tags => {
+    //override the tags render
+    return (
+      <View style={styles.customTagsContainer}>
+        {this.state.tagsSelected.map((t, i) => {
+          return (
+            <TouchableHighlight
+              key={i}
+              style={styles.customTag}
+              onPress={() => this.handleDelete(i)}
+            >
+              <Text style={{ color: "white" }}>
+                 { t.emailtag}
+              </Text>
+            </TouchableHighlight>
+          );
+        })}
+      </View>
+    );
+  };
 
-    const lastTyped = horizontalText.charAt(horizontalText.length - 1);
-    const parseWhen = [',', ' ', ';', '\n'];
+  customRenderSuggestion = suggestion => {
+    //override suggestion render the drop down
+    const name = suggestion.emailtag;
+    return (
+      <Text style={{marginVertical:2,fontSize:15}}>
+        {name.substr(0, name.indexOf(" "))}  {suggestion.emailtag}
+      </Text>
+    );
+  };
 
-    if (parseWhen.indexOf(lastTyped) > -1) {
-      this.setState({
-        horizontalTags: [...this.state.horizontalTags, this.state.horizontalText],
-        horizontalText: "",
-      });
-      this._horizontalTagInput.scrollToEnd();
-    }
-  }
+  handleDelete = index => {
+    //tag deleted, remove from our tags array
+    let tagsSelected = this.state.tagsSelected;
+    tagsSelected.splice(index, 1);
+    this.setState({ tagsSelected });
+  };
+
+  handleAddition = contact => {
+    //suggestion clicked, push it to our tags array
+    this.setState({ tagsSelected: this.state.tagsSelected.concat([contact]) });
+  };
+
+  onCustomTagCreated = userInput => {
+    //user pressed enter, create a new tag from their input
+    const contact = {
+      emailtag: userInput,
+    
+    };
+    this.handleAddition(contact);
+  };
+
+
+  showDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: true });
+  };
+ 
+  hideDateTimePicker = () => {
+    this.setState({ isDateTimePickerVisible: false });
+  };
+  showDateTimePicker2 = () => {
+    this.setState({ isDateTimePickerVisible2: true });
+  };
+ 
+  hideDateTimePicker2 = () => {
+    this.setState({ isDateTimePickerVisible2: false });
+  };
+ 
+  handleDatePicked = date => {
+    this.setState({starttime:date})
+    console.log(this.state.starttime)
+    this.hideDateTimePicker();
+  };
+  handleDatePicked2 = date => {
+    this.setState({endtime:date})
+    console.log(this.state.endtime)
+    this.hideDateTimePicker2();
+  };
+
 
 
   ///Tạo mới 1 cv moi
 creatework= async()=>{
+ 
    var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
     var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
-   // console.log(idproject)
+    var emailArray = this.state.tagsSelected.map(function (obj) {
+      return obj.emailtag;
+    });
+    console.log(url.url)
    setTimeout(() => {
     this.setState({load:false})
    }, 5000);
   this.setState({load:true})
   let email = await SecureStore.getItemAsync('email');
   let details = {
+
     name:this.state.name,
     email:email,
-    emailtag:this.state.tags,
+    emailtag:emailArray,
     target:this.state.target,
-    endday:this.state.endday,
-    endmonth:this.state.endmonth,
-    endyear:this.state.endyear,
     status:this.state.status,
     description:this.state.description,
     idproject:idproject,
-    nameproject:nameproject
+    nameproject:nameproject,
+    starttime:this.state.starttime,
+    endtime:this.state.endtime,
+    id:this.state.id
    
   }
   let formBody = [];
@@ -131,20 +198,25 @@ creatework= async()=>{
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch('https://project-tuan.herokuapp.com/work', {
+  fetch( url.url+'/work/insertwork' /*'https://project-tuan.herokuapp.com/work'*/, {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
   },
   body: formBody,
-  }).then((response) => 
-  {
-    this.setState({load:false})
-    this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
-  
-  }
+  }).then((response) =>response.text()
+ 
   )
   .then((responseData) => {
+//  console.log(responseData)
+  if(responseData==='err'){
+  
+    alert('có lỗi')
+  }else{
+    this.setState({load:false})
+    this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
+  }
+  
 
  
   })
@@ -153,7 +225,9 @@ creatework= async()=>{
 
 
 
-
+click=()=>{
+  console.log(this.state.tagsSelected)
+}
 
   render() {
 
@@ -169,7 +243,7 @@ creatework= async()=>{
         <View style={{flexDirection:'column',width:'100%',alignItems:'center'}}>
 
         
-
+    <TextInput  style={styles.textinput} onChangeText={(id) => this.setState({id})} value={this.state.id} placeholder='mã'></TextInput>  
 
 <TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='Tên công việc'></TextInput>  
 
@@ -178,24 +252,26 @@ creatework= async()=>{
 
 </View>
        
-        <View style={{marginTop:10, flexDirection: 'row', alignItems: 'center',width:'100%',marginLeft:'5%'}}>
-          <TagInput
-            value={this.state.tags}
-            onChange={this.onChangeTags}
-            labelExtractor={this.labelExtractor}
-            text={this.state.text}
-            onChangeText={this.onChangeText}
-            tagColor="gray"
-            tagTextColor="white"
-            inputProps={inputProps}
-            maxHeight={100}
-            borderWidth={1}
-            tagContainerStyle={{height:Platform.OS==='ios'?35:20}}
-            
-           
-           
-            
+        <View  style={{marginTop:10, paddingBottom:this.state.layoutpd,   zIndex: 1,flexDirection: 'row', alignItems: 'center',width:'100%',marginLeft:'5%'}}>
+          <View style={styles.autocompleteContainer}>
+        
+          <AutoTags
+            //required
+            suggestions={this.state.suggestions}
+            tagsSelected={this.state.tagsSelected}
+            handleAddition={this.handleAddition}
+            handleDelete={this.handleDelete}
+            //optional
+            placeholder="Add a contact.."
+            filterData={this.customFilterData}
+            renderSuggestion={this.customRenderSuggestion}
+            renderTags={this.customRenderTags}
+            onCustomTagCreated={this.onCustomTagCreated}
+            autoFocus={false}
+         
+         
           />
+        </View>
         </View>
    <View style={{width:'90%', borderColor: 'gray',marginLeft:'5%',marginTop:10,borderRadius:4,justifyContent:'center',alignItems:'center',
    borderWidth: 1, height: 40,}}>
@@ -215,12 +291,34 @@ creatework= async()=>{
     />
     </View>
        <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endday) => this.setState({endday})} value={this.state.endday} keyboardType='numeric' placeholder='Ngày'></TextInput>
-       <TextInput style={styles.textinputnumber}  onChangeText={(endmonth) => this.setState({endmonth})} value={this.state.endmonth} keyboardType='numeric' placeholder='Tháng'></TextInput>
-       <TextInput style={styles.textinputnumbeyear}  onChangeText={(endyear) => this.setState({endyear})} value={this.state.endyear} keyboardType='numeric' placeholder='Năm'></TextInput>
-
+       <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker} >
+      <Text style={styles.textbtn2}>Thời gian bắt đầu </Text>
+       </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible}
+          onConfirm={this.handleDatePicked}
+          onCancel={this.hideDateTimePicker}
+          mode={'date'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:12,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.starttime.toString()}</Text>
 
        </View>
+       <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
+       <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker2} >
+      <Text style={styles.textbtn2}>Thời gian kết thúc </Text>
+       </TouchableOpacity>
+        <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible2}
+          onConfirm={this.handleDatePicked2}
+          onCancel={this.hideDateTimePicker2}
+          mode={'date'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:12,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.endtime.toString()}</Text>
+
+       </View>
+       
   <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='description'></TextInput>
 
       </View>
@@ -256,5 +354,43 @@ containerview:{
 },
 textbtn:{
  width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:15,fontSize:17
-}
+},
+textinputop:{
+  width:'38.5%', borderColor:'#fff',
+   borderWidth: 1, height: 40,marginVertical:6,borderRadius:4,marginHorizontal:3
+},textbtn2:{
+  width:'100%',height:'100%',backgroundColor:'red',textAlign:'center',color:'#fff',paddingTop:5,fontSize:17
+ },  customTagsContainer: {
+  flexDirection: "row",
+  flexWrap: "wrap",
+  alignItems: "flex-start",
+  backgroundColor: "#efeaea",
+  width:'85%'
+ 
+},
+customTag: {
+  backgroundColor: "#9d30a5",
+  justifyContent: "center",
+  alignItems: "center",
+  height: 30,
+  marginLeft: 5,
+  marginTop: 5,
+  borderRadius: 30,
+  padding: 8
+},
+
+
+autocompleteContainer: {
+  flex: 1,
+  left: 20,
+
+  right: 20,
+  zIndex: 1
+},
+label: {
+  color: "#614b63",
+  fontWeight: "bold",
+  marginBottom: 10
+},
+
 })

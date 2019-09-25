@@ -28,25 +28,25 @@ export default function FlastlistProject(props)  {
         renderItem={({ item }) => (
           <View  style={{backgroundColor:'#fff',marginTop:1 ,minHeight:139,flexDirection:'row'}}>
    
-          <View style={{flexDirection:'column',marginLeft:10,width:'85%'}}>
+          <View style={{flexDirection:'column',marginLeft:10,width:'97%'}}>
             <TouchableOpacity onPress={()=>{
-              props.pr.navigation.navigate('ProjectDetail',{id:item._id,nameproject:item.name})}
+              props.pr.navigation.navigate('ProjectDetail',{id:item.id,nameproject:item.tenduan})}
             }>
-          <Text style={styles.textname}>Dự án {Platform.OS==='android'? item.name.slice(0, 18): item.name.slice(0, 25)}..</Text>
-          <Text style={{height:20}}>ID :{item._id}</Text>
+          <Text style={styles.textname}>Dự án {Platform.OS==='android'? item.tenduan.slice(0, 18): item.tenduan.slice(0, 25)}..</Text>
+          <Text style={{height:20}}>ID :{item.id}</Text>
 
 
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.statusItem}}   style={{width:24,height:24}}></Image>
-          <Text style={{marginLeft:3,padding:4}}>Trạng thái :{item.status}</Text>
+          <Text style={{marginLeft:3,padding:4}}>Trạng thái :{item.trangthai}</Text>
           </View>
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.timeItem}}   style={{width:25,height:25}}></Image>
-          <Text style={{marginLeft:3,padding:3}}>Kết thúc:{item.endday}-{item.endmonth}</Text>
+          <Text style={{marginLeft:3,padding:3}}>Kết thúc:{new Date(item.thoigianend).toLocaleDateString()}</Text>
           </View>
           <View style={{flexDirection:'row',alignItems:'center',alignItems:'center',marginVertical:3}}>
             <Image source={{uri:icon.descriptionItem}}   style={{width:23,height:23}}></Image>
-          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.description.slice(0, 25)}...</Text>
+          <Text style={{marginLeft:3,padding:3}}>Mô tả {item.mota.slice(0, 25)}...</Text>
           </View>
         
           
@@ -54,14 +54,15 @@ export default function FlastlistProject(props)  {
         
        
           </View>
-          <View style={{width:'15%',marginRight:4,height:'100%',backgroundColor:'#5AC2FE',flexDirection:'column',alignItems:'center'}}>
-            <TouchableOpacity style={{marginTop:20}}>
+          <View style={{width:'3%',marginRight:4,height:'100%',backgroundColor:'#5AC2FE',flexDirection:'column',alignItems:'center'}}>
+            
+            {/*<TouchableOpacity style={{marginTop:20}}>
               <Image source={{uri:icon.star}} style={{width:25,height:25}}></Image>
             </TouchableOpacity>
             
             <TouchableOpacity style={{marginTop:'90%'}}>
               <Image source={{uri:icon.error}}  style={{width:25,height:25}}></Image>
-            </TouchableOpacity>
+          </TouchableOpacity>*/}
           </View>
     </View>
         )}
@@ -70,7 +71,7 @@ export default function FlastlistProject(props)  {
       renderRight={({ item }) => (
         <View  style={{ width: 130,height:139 ,flexDirection:'row',backgroundColor:'#fff',marginTop:1,justifyContent:'center',alignItems:'center'}}>
            <TouchableOpacity  onPress={()=> {
-            props.pr.navigation.navigate('EditProject',{ listtag:item.emailtag,name:item.name,id:item._id,description:item.description,desire:item.desire,company:item.company,endday:item.endday,endmonth:item.endmonth,endyear:item.endyear,status:item.status})
+            props.pr.navigation.navigate('EditProject',{ name:item.tenduan,id:item.id,description:item.mota,desire:item.mongmuon,company:item.congty,starttime:item.thoigianstart,endtime:item.thoigianend,status:item.trangthai})
            }
            } style={styles.btnopacity1}>
             <Image style={{width:25,height:25,marginLeft:3}} source={{uri:icon.editItem}}></Image>
@@ -86,7 +87,7 @@ export default function FlastlistProject(props)  {
                       style: 'cancel',
                   }, {
                       text: 'OK',
-                      onPress: () =>  {  props.deletefun(item._id)
+                      onPress: () =>  {  props.deletefun(item.id)
                       }
                   }
               ]
@@ -99,7 +100,7 @@ export default function FlastlistProject(props)  {
            </TouchableOpacity>
            </View>
         )}
-        keyExtractor={item => item._id}
+        keyExtractor={item => item.id}
         itemBackgroundColor={'#ccc'}
         backgroundColor={'#ccc'}
        

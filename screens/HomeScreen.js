@@ -9,9 +9,11 @@ import AnimateNumber from 'react-native-countup';
 import * as firebase from 'firebase';
 import * as SecureStore from 'expo-secure-store';
 import Flatlist from '../components/FlastlistProject'
-import axios from 'axios';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from "react-native-modal";
+import axios from 'axios';
+
+import url from './url'
 
 
 export default function HomeScreen(props) {
@@ -26,11 +28,12 @@ async function getProject(){
   let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'https://project-tuan.herokuapp.com/project?email='+email,
+
+ url.url+'/project/getduansql?email='+email
   );
- //console.log(result.data)
-  //console.log(email)
+
   setListproject(result.data)
+
 
 }
 
@@ -50,6 +53,7 @@ async function deleteproject(idproject){
 }
 
   useEffect(() => {
+
   getProject().then(()=>{
     setLoad(false)
   })
@@ -64,11 +68,12 @@ async function deleteproject(idproject){
   
     <View style={{flex:1,backgroundColor:'#ccc'}}>
      
-         <Spinner visible={false}
+        <Spinner visible={false}
                    color='blue'>                  
                    </Spinner>
       <Flatlist listproject={listproject} deletefun={deleteproject}  pr={props} setMd={()=>setLoadmd(true)} />
- 
+  
+  
     </View>
   );
 }

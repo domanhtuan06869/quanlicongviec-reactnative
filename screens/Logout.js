@@ -3,18 +3,19 @@ import {Image, StyleSheet, Text, View,Platform, ActivityIndicator,TouchableOpaci
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/Colors';
 import * as firebase from 'firebase';
-
+import * as SecureStore from 'expo-secure-store';
 export default function TabChartSceen(props) {
-useEffect(()=>{
-  const currentUser = firebase.auth()
-  if (currentUser != null) {
-    firebase
-      .auth()
-      .signOut()
-      .then(() => props.navigation.navigate('Login'))
-      .catch(error => { })
-
+  async function logout() {
+    await SecureStore.setItemAsync('email', 'null');
+    await SecureStore.setItemAsync('name', 'null');
+    let email= await SecureStore.getItemAsync('email');
+    if(email=='null'){
+      props.navigation.navigate('Login')
+    }
   }
+useEffect(()=>{
+logout()
+
 })
 
   return (

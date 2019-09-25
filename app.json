@@ -9,6 +9,9 @@
       "android",
       "web"
     ],
+    "android": {
+      "package": "com.tuan.projectmanager"
+    }, 
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

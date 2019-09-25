@@ -10,7 +10,7 @@ import {SwipeableFlatList} from 'react-native-swipeable-flat-list';
 import axios from 'axios';
 import { Ionicons } from '@expo/vector-icons';
 import icon from '../config/Iconitem'
-
+import url from './url'
 
 export default function ProjectInvoled(props) {
   const {navigate} = props.navigation;
@@ -25,10 +25,10 @@ async function getProject(){
   let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'https://project-tuan.herokuapp.com/project/getprojectwithmenber?email='+email,
+    url.url+'/project/getprojectlienquan?email='+email,
   );
  console.log(result.data)
-  //console.log(email)
+  console.log(email)
  // setListproject(result.data)
  setListproject(result.data)
   
@@ -47,10 +47,7 @@ async function deleteprojectInvolved(idproject){
 
   useEffect(() => {
     getProject()
-    const interval = setInterval(() => {
-      getProject()
-    }, 10000);
-    return () => clearInterval(interval);
+
   },[]);
 function searchFor(toSearch,objects) {
   var results = [];
@@ -98,12 +95,12 @@ props.navigation.navigate('ProjectDetail',{id:id})
             renderItem={({ item }) => (
               <View style={{backgroundColor:'#fff',marginTop:1,height: 68}}>
                 <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
-                  toSreenDetail(item._id)
+                  toSreenDetail(item.id)
                 }}
                 
                 >
-                <Text style={{backgroundColor:'#fff',fontSize:17,color:'red',fontWeight:'bold'}}>Dự án {item.name}</Text>
-                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item._id}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17,color:'red',fontWeight:'bold'}}>Dự án {item.tenduan}</Text>
+                <Text style={{backgroundColor:'#fff',fontSize:17}}>ID {item.id}</Text>
                 </TouchableOpacity>
                 </View>
             )}
@@ -112,7 +109,7 @@ props.navigation.navigate('ProjectDetail',{id:id})
             renderRight={({ item }) => (
             <View  style={{ width: 70 ,height:68,flexDirection:'row',marginTop:1,alignItems:'center'}}>
                <TouchableOpacity onPress={()=>{
-                      deleteprojectInvolved(item._id).then(()=>{
+                      deleteprojectInvolved(item.id).then(()=>{
                         getProject()
                       })
                }} style={{marginLeft:10}}>
@@ -120,7 +117,7 @@ props.navigation.navigate('ProjectDetail',{id:id})
                </TouchableOpacity>
                </View>
             )}
-            keyExtractor={item => item._id}
+            keyExtractor={item => item.id}
             itemBackgroundColor={'#ccc'}
             backgroundColor={'#ccc'}
        

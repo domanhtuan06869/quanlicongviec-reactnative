@@ -2,6 +2,7 @@ import React from 'react';
 import {Image, StyleSheet, Text, View,Platform, TouchableOpacity} from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/Colors';
+import url from './url'
 export default function AccoutScreen(props) {
   return (
     <View style={styles.container}>

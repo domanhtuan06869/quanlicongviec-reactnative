@@ -4,7 +4,7 @@ import { Ionicons } from '@expo/vector-icons';
 import colors from '../constants/Colors';
 import axios from 'axios';
 import * as SecureStore from 'expo-secure-store';
-
+import url from './url'
 export default function ContactScreen(props) {
   const[listworkmenber,setListworkmenber]=useState([])
   async function getWorkMenber(){
@@ -13,7 +13,7 @@ export default function ContactScreen(props) {
  // let name = await SecureStore.getItemAsync('name');
   
   const result = await axios(
-    'http://192.168.1.5:3000/work/getworkwithmenber?email='+email,
+    url.url+'/work/getworkwithmenber?email='+email,
   );
  console.log(result.data)
   //console.log(email)
