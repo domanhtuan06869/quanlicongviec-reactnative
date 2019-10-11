@@ -1,8 +1,8 @@
 import React, { Component } from 'react';
 import {
-  Text,
+  Text,Alert,
   View,Button,StyleSheet,
-  Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,TouchableHighlight
+  Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,TouchableHighlight,
 } from 'react-native';
 import TagInput from 'react-native-tag-input';
 import { Ionicons } from '@expo/vector-icons';
@@ -16,15 +16,16 @@ import url from '../url'
 
 
 
-export default class addprojectScreen extends React.Component {
+export default class AddprojectScreen extends React.Component {
 
   async getUser(){
     const result = await axios( url.url+'/users/getuser');
-    console.log(result.data)
+
     this.setState({suggestions:result.data})
   }
   componentDidMount(){
     this.getUser()
+
   }
   static navigationOptions = ({ navigation }) => ({
     header:(
@@ -54,8 +55,10 @@ export default class addprojectScreen extends React.Component {
     isDateTimePickerVisible: false,
     isDateTimePickerVisible2: false,
     isDateTimePickerVisible3: false,
+    isDateTimePickerVisible4: false,
     startdate:'',
-    endtime:new Date().toLocaleDateString(),
+    enddate:'',
+    endtime:'',
     starttime:'',
     id:'',
     suggestions :[],
@@ -102,7 +105,7 @@ export default class addprojectScreen extends React.Component {
     //override suggestion render the drop down
     const name = suggestion.email;
     return (
-      <Text style={{marginVertical:2,fontSize:15}}>
+      <Text style={{marginVertical:4,fontSize:16}}>
         {name.substr(0, name.indexOf(" "))}  {suggestion.email}
       </Text>
     );
@@ -131,9 +134,6 @@ export default class addprojectScreen extends React.Component {
   };
 
 
-
-
-
   showDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: true });
   };
@@ -157,8 +157,21 @@ export default class addprojectScreen extends React.Component {
 
 
   handleDatePicked = date => {
-  
- var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    var month=date.getMonth()+1
+     var day = date.getDate()
+    var newtime;
+    if(day<10 & month<10){
+      newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-0'+date.getDate()
+    }else if (day<10){
+    newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()
+
+  }else if(month<10){
+    newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-'+date.getDate()
+  }
+  else{
+    newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+
+  }
     this.setState({startdate:newtime})
     this.hideDateTimePicker()
     setTimeout(()=>{
@@ -167,14 +180,49 @@ this.showDateTimePicker3()
     
   };
   handleDatePicked2 = date => {
-
-    this.setState({endtime:date})
+    var month=date.getMonth()+1
+    var day = date.getDate()
+    var newtime;
+   if(day<10 & month<10){
+     newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-0'+date.getDate()
+   }else if (day<10){
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()
+   }else if(month<10){
+   newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-'+date.getDate()
+ } else{
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+} 
+    this.setState({enddate:newtime})
     this.hideDateTimePicker2();
+    setTimeout(()=>{
+      this.showDateTimePicker4()
+          },400)
   
   };
 
   handleDatePicked3 = date => {
-    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    var hours=date.getHours()
+    var min=date.getMinutes()
+    var sc=date.getSeconds()
+    var newtime;
+    if(hours<10 & min<10 & sc<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10 & min<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if( min<10 & sc<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours <10 & sc<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }else if(min<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if(sc<10){
+      newtime=''+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else{
+      newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }
+    
     this.setState({starttime:newtime})
   
     this.hideDateTimePicker3();
@@ -189,12 +237,42 @@ this.showDateTimePicker3()
     this.setState({ isDateTimePickerVisible3: false });
   };
 
+  showDateTimePicker4 =()=> {
+    this.setState({ isDateTimePickerVisible4: true });
+ 
+  };
+  hideDateTimePicker4 = () => {
+    this.setState({ isDateTimePickerVisible4: false });
+  };
+  handleDatePicked4 = date => {
+    var hours=date.getHours()
+    var min=date.getMinutes()
+    var sc=date.getSeconds()
+    var newtime;
+    if(hours<10 & min<10 & sc<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10 & min<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if( min<10 & sc<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours <10 & sc<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }else if(min<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if(sc<10){
+      newtime=''+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else{
+      newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }
+    this.setState({endtime:newtime})
+    this.hideDateTimePicker4();
+  };
   ///Tạo mới 1 project
 async createproject(){
   this.setState({load:true})
-  setTimeout(() => {
-    this.setState({load:false})
-  },10000);
+
   let email = await SecureStore.getItemAsync('email');
   var emailArray = this.state.tagsSelected.map(function (obj) {
     return obj.email;
@@ -202,50 +280,90 @@ async createproject(){
   var tokenarr = this.state.tagsSelected.map(function (obj) {
     return obj.token;
   });
-  let details = {
+
+
+
+  const postData = {                                
     name:this.state.name,
     email:email,
     emailtag:emailArray,
     company:this.state.company,
     desire:this.state.desire,
     starttime:this.state.startdate+' '+this.state.starttime,
-    endtime:this.state.endtime,
+    endtime:this.state.enddate+' '+this.state.endtime,
     status:this.state.status,
     description:this.state.description,
     id:this.state.id,
     token:tokenarr
-   
-  }
-  let formBody = [];
-  for (let property in details) {
-    let encodedKey = encodeURIComponent(property);
-    let encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
-  fetch(   url.url+'/project/insertproject'   /*'https://project-tuan.herokuapp.com/project'*/, {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  },
-  body: formBody,
-  }).then((response) => response.text())
-  .then((responseData) => {
+     };
+  let axiosConfig = {
+    headers: {
+      'Content-Type' : 'application/json; charset=UTF-8',
 
-  })
-  .catch((err) => { });
+    }
+  };
+  
+ axios({
+         method: 'post',
+        url:  url.url+'/project/insertproject' ,
+        headers: axiosConfig,
+        data: postData
+    })
+    .then((res) => {
+  
+      if(res.data.originalError){
+        console.log(res.data.originalError)
+        setTimeout(() => {
+          this.setState({load:false})
+         }, 5000);
+         setTimeout(() => {
+          Alert.alert('Có lỗi kiểm tra lại')
+         }, 5500);
+      }else{
+        this.setState({load:false})
+        this.props.navigation.push('Home')
+      }
+ 
+    }).catch(err=>{
+      console.log(err)
+    })
 }
 
-
+alertshow(title){
+Alert.alert(title)
+}
  addAll=()=>{
-this.createproject().then(()=>{
-  this.setState({load:false})
-  this.props.navigation.push('Home')
-}).catch(()=>{
-  setTimeout(()=>{
-    this.setState({load:false})
-  },5000)
-})
+  var date=new Date()
+
+   var end= this.state.enddate+' '+this.state.endtime
+   var day = new Date(end.replace(' ', 'T'));
+   var start=new Date(date.getFullYear(),date.getMonth(),date.getDate(),date.getHours(),date.getMinutes(),date.getSeconds())
+   console.log(day.getTime()-start)
+if(this.state.id==''){
+  this.alertshow('Vui lòng nhập mã')
+}else if(this.state.name==''){
+  this.alertshow('Vui lòng nhập tên')
+} else if(this.state.company==''){
+  this.alertshow('Vui lòng nhập tên công ty')
+}else if(this.state.desire==''){
+  this.alertshow('Vui lòng nhập mong muốn')
+}else if(this.state.tagsSelected.length<=0){
+  this.alertshow('Vui lòng thêm ít nhất một email tag')
+}else if(this.state.status==null){
+  this.alertshow('Hãy chọn trạng thái')
+}else if(this.state.starttime==''||this.state.startdate==''){
+  this.alertshow('Chọn thời gian bắt đầu')
+}else if(this.state.endtime==''||this.state.enddate==''){
+  this.alertshow('Chọn thời gian kết túc')
+}else if(this.state.description==''){
+  this.alertshow('Nhập mô tả')
+}else if(day.getTime()-start<=25193000){
+  this.alertshow('Vui lòng nhập thời gian lớn hơn thời gian hiện tại')
+}
+else{
+  this.createproject()
+}
+
 }
 
 click=()=>{
@@ -343,8 +461,14 @@ click=()=>{
           onCancel={this.hideDateTimePicker2}
           mode={'date'}
         />
-       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:13,width:'50%',  borderColor: 'gray',
-   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{new Date(this.state.endtime).toLocaleDateString()}</Text>
+           <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible4}
+          onConfirm={this.handleDatePicked4}
+          onCancel={this.hideDateTimePicker4}
+          mode={'time'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:'10%',paddingTop:13,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{this.state.enddate+' '+this.state.endtime}</Text>
 
        </View>
   <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>

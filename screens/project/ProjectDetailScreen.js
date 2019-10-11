@@ -145,7 +145,7 @@ const Menber = (props) => (
               [
                   
                   {
-                      text: 'Cancel',
+                      text: 'Cancel',  
                       style: 'cancel',
                   }, {
                       text: 'OK',
@@ -187,7 +187,7 @@ const Detail = (props) => (
       <Text style={{color:'#36D86E',marginLeft:8,textAlignVertical:'center',paddingTop:3,fontSize:16}}>{props.status}</Text>  
       </View>
       <View  style={{width:'60%',height:'100%',flexDirection:'row',alignItems:'center'}}>
-      <Image source={{uri:'https://i.pravatar.cc/300?5559'}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+      <Image source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
         <View style={{height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
           <Text style={{color:'gray'}}>người tạo</Text>
           <Text style={{fontSize:16}}>{props.email}</Text>
@@ -304,7 +304,6 @@ export default class TabChartScreen extends React.Component {
       );
           this.setState({datawork:result.data})
           
-    
         
       }
       async getProject() {
@@ -314,12 +313,13 @@ export default class TabChartScreen extends React.Component {
           url.url+'/project/getoneduanwithid?idproject='+idproject
          /* 'https://project-tuan.herokuapp.com/project/getoneproject?id='+idproject*/
         );
-       console.log(result.data)
+    
         this.setState({nameproject:result.data.tenduan,start:result.data.starttime,status:result.data.trangthai,desire:result.data.mongmuon,description:result.data.mota,email:result.data.email})
       }
 
 
 async componentDidMount(){
+  
 this.getProject()
 this.getWork()
 

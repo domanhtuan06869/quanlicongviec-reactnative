@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text,
-  View,Button,StyleSheet,
+  View,Alert,StyleSheet,
   Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,TouchableHighlight
 } from 'react-native';
 import TagInput from 'react-native-tag-input';
@@ -37,7 +37,7 @@ export default class WorkOfProjectScreen extends React.Component {
       paddingVertical:10,
       paddingHorizontal:20,}}>
           <Ionicons onPress={()=>{navigation.goBack()}} color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-arrow-back':'md-arrow-back'}/>
-          <Text style={{fontSize:20,marginTop:5,color:'white',}}>SETTING</Text>
+          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Thêm Công Việc</Text>
           <Ionicons style={{marginTop:5}} size={30} color={'white'} name={Platform.OS=='ios'?'ios-search':'md-search'}/>
       </View>
     ),
@@ -45,21 +45,18 @@ export default class WorkOfProjectScreen extends React.Component {
 
 
   state = {
-    tags: ['dmt@gmail.com','tuan@gmail.com'],
-    objectTags:{},
-    text: "",
-    horizontalTags: [],
-    horizontalText: "",
+ 
     name:'',
     status:'',
     target:'',
     description:'',
-    endday:'',
-    endmonth:'',
-    date:'',
+    enddate:'',
+    startdate:'',
     load:false,
     isDateTimePickerVisible: false,
     isDateTimePickerVisible2: false,
+    isDateTimePickerVisible3: false,
+    isDateTimePickerVisible4: false,
     starttime:'',
     endtime:'',
     id:'',
@@ -75,7 +72,7 @@ export default class WorkOfProjectScreen extends React.Component {
     let searchResults = this.state.suggestions.filter(s => {
       return (
      
-        s.emailtag.toUpperCase().includes(query)
+        s.email.toUpperCase().includes(query)
       );
     });
     return searchResults;
@@ -93,7 +90,7 @@ export default class WorkOfProjectScreen extends React.Component {
               onPress={() => this.handleDelete(i)}
             >
               <Text style={{ color: "white" }}>
-                 { t.emailtag}
+                 { t.email}
               </Text>
             </TouchableHighlight>
           );
@@ -104,10 +101,10 @@ export default class WorkOfProjectScreen extends React.Component {
 
   customRenderSuggestion = suggestion => {
     //override suggestion render the drop down
-    const name = suggestion.emailtag;
+    const name = suggestion.email;
     return (
       <Text style={{marginVertical:2,fontSize:15}}>
-        {name.substr(0, name.indexOf(" "))}  {suggestion.emailtag}
+        {name.substr(0, name.indexOf(" "))}  {suggestion.email}
       </Text>
     );
   };
@@ -133,7 +130,6 @@ export default class WorkOfProjectScreen extends React.Component {
     this.handleAddition(contact);
   };
 
-
   showDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: true });
   };
@@ -141,6 +137,7 @@ export default class WorkOfProjectScreen extends React.Component {
   hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
   };
+
   showDateTimePicker2 = () => {
     this.setState({ isDateTimePickerVisible2: true });
   };
@@ -150,27 +147,68 @@ export default class WorkOfProjectScreen extends React.Component {
   };
  
   handleDatePicked = date => {
-    this.setState({starttime:date})
-    console.log(this.state.starttime)
-    this.hideDateTimePicker();
+  
+ var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    this.setState({startdate:newtime})
+    this.hideDateTimePicker()
+    setTimeout(()=>{
+this.showDateTimePicker3()
+    },400)
+    
   };
   handleDatePicked2 = date => {
-    this.setState({endtime:date})
-    console.log(this.state.endtime)
+    var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    this.setState({enddate:newtime})
     this.hideDateTimePicker2();
+    setTimeout(()=>{
+      this.showDateTimePicker4()
+          },400)
+  
+  };
+
+  handleDatePicked3 = date => {
+    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    this.setState({starttime:newtime})
+  
+    this.hideDateTimePicker3();
+  };
+
+  showDateTimePicker3 =()=> {
+    this.setState({ isDateTimePickerVisible3: true });
+ 
+  };
+ 
+  hideDateTimePicker3 = () => {
+    this.setState({ isDateTimePickerVisible3: false });
+  };
+
+  showDateTimePicker4 =()=> {
+    this.setState({ isDateTimePickerVisible4: true });
+ 
+  };
+  hideDateTimePicker4 = () => {
+    this.setState({ isDateTimePickerVisible4: false });
+  };
+  handleDatePicked4 = date => {
+    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    this.setState({endtime:newtime})
+  
+    this.hideDateTimePicker4();
   };
 
 
 
   ///Tạo mới 1 cv moi
-creatework= async()=>{
+/*creatework= async()=>{
  
    var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
     var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
     var emailArray = this.state.tagsSelected.map(function (obj) {
-      return obj.emailtag;
+      return obj.email;
     });
-    console.log(url.url)
+    var tokenArray = this.state.tagsSelected.map(function (obj) {
+      return obj.token;
+    });
    setTimeout(() => {
     this.setState({load:false})
    }, 5000);
@@ -186,9 +224,10 @@ creatework= async()=>{
     description:this.state.description,
     idproject:idproject,
     nameproject:nameproject,
-    starttime:this.state.starttime,
-    endtime:this.state.endtime,
-    id:this.state.id
+    starttime:this.state.startdate+' '+this.state.starttime,
+    endtime:this.state.enddate+' '+this.state.endtime,
+    id:this.state.id,
+    token:tokenArray
    
   }
   let formBody = [];
@@ -198,7 +237,7 @@ creatework= async()=>{
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch( url.url+'/work/insertwork' /*'https://project-tuan.herokuapp.com/work'*/, {
+  fetch( url.url+'/work/insertwork' /*'https://project-tuan.herokuapp.com/work', {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -221,12 +260,70 @@ creatework= async()=>{
  
   })
   .catch((err) => { console.log(err); });
+}*/
+
+creatework=async()=>{
+  var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
+  var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
+  var emailArray = this.state.tagsSelected.map(function (obj) {
+    return obj.email;
+  });
+  var tokenArray = this.state.tagsSelected.map(function (obj) {
+    return obj.token;
+  });
+
+this.setState({load:true})
+let email = await SecureStore.getItemAsync('email');
+  const postData = {                                
+    name:this.state.name,
+    email:email,
+    emailtag:emailArray,
+    target:this.state.target,
+    status:this.state.status,
+    description:this.state.description,
+    idproject:idproject,
+    nameproject:nameproject,
+    starttime:this.state.startdate+' '+this.state.starttime,
+    endtime:this.state.enddate+' '+this.state.endtime,
+    id:this.state.id,
+    token:tokenArray
+     };
+
+     let axiosConfig = {
+      headers: {
+        'Content-Type' : 'application/json; charset=UTF-8',
+
+      }
+    };
+    
+    axios({
+          method: 'post',
+          url:   url.url+'/work/insertwork',
+          headers: axiosConfig,
+          data: postData
+      })
+      .then((res) => {
+       
+        if(res.data.originalError){
+          setTimeout(() => {
+            this.setState({load:false})
+           }, 5000);
+           setTimeout(() => {
+            Alert.alert('Có lỗi kiểm tra lại')
+           }, 5300);
+        }else{
+          this.setState({load:false})
+          this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
+        }
+   
+      }).catch(err=>{
+        console.log(err)
+      })
+    
 }
 
+componentDidMount(){
 
-
-click=()=>{
-  console.log(this.state.tagsSelected)
 }
 
   render() {
@@ -294,28 +391,40 @@ click=()=>{
        <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker} >
       <Text style={styles.textbtn2}>Thời gian bắt đầu </Text>
        </TouchableOpacity>
-        <DateTimePicker
+       <DateTimePicker
           isVisible={this.state.isDateTimePickerVisible}
           onConfirm={this.handleDatePicked}
           onCancel={this.hideDateTimePicker}
           mode={'date'}
         />
-       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:12,width:'50%',  borderColor: 'gray',
-   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.starttime.toString()}</Text>
+           <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible3}
+          onConfirm={this.handleDatePicked3}
+          onCancel={this.hideDateTimePicker3}
+          mode={'time'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:'10%',paddingTop:12,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.startdate+' '+this.state.starttime}</Text>
 
        </View>
        <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
        <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker2} >
       <Text style={styles.textbtn2}>Thời gian kết thúc </Text>
        </TouchableOpacity>
-        <DateTimePicker
+       <DateTimePicker
           isVisible={this.state.isDateTimePickerVisible2}
           onConfirm={this.handleDatePicked2}
           onCancel={this.hideDateTimePicker2}
           mode={'date'}
         />
-       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:12,width:'50%',  borderColor: 'gray',
-   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.endtime.toString()}</Text>
+           <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible4}
+          onConfirm={this.handleDatePicked4}
+          onCancel={this.hideDateTimePicker4}
+          mode={'time'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:'10%',paddingTop:12,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3}}>{this.state.enddate+' '+this.state.endtime}</Text>
 
        </View>
        

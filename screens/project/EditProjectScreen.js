@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import {
   Text,
-  View,Button,StyleSheet,
+  View,Button,StyleSheet,Alert,
   Platform,TextInput,ScrollView,TouchableOpacity,KeyboardAvoidingView,TouchableHighlight
 } from 'react-native';
 import TagInput from 'react-native-tag-input';
@@ -37,16 +37,20 @@ export default class addprojectScreen extends React.Component {
     tagsSelected : [],
 
    name:this.props.navigation.getParam('name', 'NO-NAME'),
-    status:'',
+    status:null,
     desire:this.props.navigation.getParam('desire', 'NO-NAME'),
     description:this.props.navigation.getParam('description', 'NO-NAME'),
     company:this.props.navigation.getParam('company', 'NO-NAME'),
     load:false,
     isDateTimePickerVisible: false,
     isDateTimePickerVisible2: false,
-    starttime:new Date(this.props.navigation.getParam('starttime', 'NO-NAME')).toLocaleDateString(),
-    endtime:new Date(this.props.navigation.getParam('endtime', 'NO-NAME')).toLocaleDateString(),
+    isDateTimePickerVisible3: false,
+    isDateTimePickerVisible4: false,
+    starttime:this.props.navigation.getParam('starttime', 'NO-NAME'),
+    endtime:this.props.navigation.getParam('endtime', 'NO-NAME'),
     id:this.props.navigation.getParam('id', 'NO-NAME'),
+    startdate:'',
+    enddate:'',
     idemailtag:[]
   };
 
@@ -117,6 +121,7 @@ export default class addprojectScreen extends React.Component {
 
 
 
+
   showDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: true });
   };
@@ -124,6 +129,10 @@ export default class addprojectScreen extends React.Component {
   hideDateTimePicker = () => {
     this.setState({ isDateTimePickerVisible: false });
   };
+
+
+
+
   showDateTimePicker2 = () => {
     this.setState({ isDateTimePickerVisible2: true });
   };
@@ -132,15 +141,57 @@ export default class addprojectScreen extends React.Component {
     this.setState({ isDateTimePickerVisible2: false });
   };
  
+
+
+
   handleDatePicked = date => {
-    this.setState({starttime:date})
-    console.log(this.state.starttime)
-    this.hideDateTimePicker();
+  
+ var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    this.setState({startdate:newtime})
+    this.hideDateTimePicker()
+    setTimeout(()=>{
+this.showDateTimePicker3()
+    },400)
+    
   };
   handleDatePicked2 = date => {
-    this.setState({endtime:date})
-    console.log(this.state.endtime)
+    var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    this.setState({enddate:newtime})
     this.hideDateTimePicker2();
+    setTimeout(()=>{
+      this.showDateTimePicker4()
+          },400)
+  
+  };
+
+  handleDatePicked3 = date => {
+    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    this.setState({starttime:newtime})
+  
+    this.hideDateTimePicker3();
+  };
+
+  showDateTimePicker3 =()=> {
+    this.setState({ isDateTimePickerVisible3: true });
+ 
+  };
+ 
+  hideDateTimePicker3 = () => {
+    this.setState({ isDateTimePickerVisible3: false });
+  };
+
+  showDateTimePicker4 =()=> {
+    this.setState({ isDateTimePickerVisible4: true });
+ 
+  };
+  hideDateTimePicker4 = () => {
+    this.setState({ isDateTimePickerVisible4: false });
+  };
+  handleDatePicked4 = date => {
+    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    this.setState({endtime:newtime})
+  
+    this.hideDateTimePicker4();
   };
 
   ///Tạo mới 1 project
@@ -162,8 +213,8 @@ async createproject(){
     emailtag:arrayEmail,
     company:this.state.company,
     desire:this.state.desire,
-    starttime:this.state.endtime,
-    endtime:this.state.endtime,
+    starttime:this.state.startdate===''?this.state.starttime:this.state.startdate+' '+this.state.starttime,
+    endtime:this.state.enddate===''?this.state.endtime:this.state.enddate+' '+this.state.endtime,
     status:this.state.status,
     description:this.state.description,
     id:this.state.id,
@@ -177,7 +228,7 @@ async createproject(){
     formBody.push(encodedKey + "=" + encodedValue);
   }
   formBody = formBody.join("&");
-  fetch(  url.url+'/project/updateprojectsql'   /*'https://project-tuan.herokuapp.com/project'*/, {
+  fetch(  url.url+'/project/updateprojectsql' , {
   method: 'POST',
   headers: {
     'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
@@ -185,22 +236,39 @@ async createproject(){
   body: formBody,
   }).then((response) => response.text())
   .then((responseData) => {
-
-  })
-  .catch((err) => { });
-}
-
-
- addAll=()=>{
-this.createproject().then(()=>{
-  this.setState({load:false})
-  this.props.navigation.push('Home')
-}).catch(()=>{
-  setTimeout(()=>{
     this.setState({load:false})
-  },5000)
-})
+    this.props.navigation.push('Home') 
+  })
+  .catch((err) => {
+    if(err){
+      alert('lỗi')
+    }
+   });
 }
+
+
+alertshow(title){
+  Alert.alert(title)
+  }
+   addAll=()=>{
+  if(this.state.name==''){
+    this.alertshow('Vui lòng nhập tên')
+  } else if(this.state.company==''){
+    this.alertshow('Vui lòng nhập tên công ty')
+  }else if(this.state.desire==''){
+    this.alertshow('Vui lòng nhập mong muốn')
+  }else if(this.state.tagsSelected.length<=0){
+    this.alertshow('Vui lòng thêm ít nhất một email tag')
+  }else if(this.state.status==null){
+    this.alertshow('Hãy chọn trạng thái')
+  }
+  else if(this.state.description==''){
+    this.alertshow('Nhập mô tả')
+  }else{
+    this.createproject()
+  }
+  
+  }
  componentDidMount(){
   this.getMenberProject()
 }
@@ -211,6 +279,7 @@ async getMenberProject(){
     url.url+ '/project/getemailandtoken?idproject='+idproject
    
   )
+  
   const resultuser = await axios( url.url+'/users/getuser');
   this.setState({suggestions:resultuser.data})
  this.setState({tagsSelected:result.data})
@@ -278,28 +347,40 @@ async getMenberProject(){
        <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker} >
       <Text style={styles.textbtn2}>Thời gian bắt đầu </Text>
        </TouchableOpacity>
-        <DateTimePicker
+       <DateTimePicker
           isVisible={this.state.isDateTimePickerVisible}
           onConfirm={this.handleDatePicked}
           onCancel={this.hideDateTimePicker}
           mode={'date'}
         />
-             <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:13,width:'50%',  borderColor: 'gray',
-   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{new Date(this.state.starttime).toLocaleDateString()}</Text>
+           <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible3}
+          onConfirm={this.handleDatePicked3}
+          onCancel={this.hideDateTimePicker3}
+          mode={'time'}
+        />
+             <Text style={{textAlignVertical:'center',paddingLeft:this.state.startdate!=''?'10%':'2%',paddingTop:13,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{this.state.startdate+' '+this.state.starttime}</Text>
 
        </View>
        <View style={{flexDirection:'row',marginTop:10, width:'100%',marginLeft:'4%',alignItems:'center'}}>
        <TouchableOpacity style ={styles.textinputop} onPress={this.showDateTimePicker2} >
       <Text style={styles.textbtn2}>Thời gian kết thúc </Text>
        </TouchableOpacity>
-        <DateTimePicker
+       <DateTimePicker
           isVisible={this.state.isDateTimePickerVisible2}
           onConfirm={this.handleDatePicked2}
           onCancel={this.hideDateTimePicker2}
           mode={'date'}
         />
-       <Text style={{textAlignVertical:'center',paddingLeft:'15%',paddingTop:13,width:'50%',  borderColor: 'gray',
-   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{new Date(this.state.endtime).toLocaleDateString()}</Text>
+           <DateTimePicker
+          isVisible={this.state.isDateTimePickerVisible4}
+          onConfirm={this.handleDatePicked4}
+          onCancel={this.hideDateTimePicker4}
+          mode={'time'}
+        />
+       <Text style={{textAlignVertical:'center',paddingLeft:this.state.enddate!=''?'10%':'2%',paddingTop:13,width:'50%',  borderColor: 'gray',
+   borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{this.state.enddate+' '+this.state.endtime}</Text>
 
        </View>
   <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
@@ -307,7 +388,7 @@ async getMenberProject(){
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.addAll} style={styles.containerview} >
-          <Text style={styles.textbtn}>TẠO DỰ ÁN</Text>
+          <Text style={styles.textbtn}>CẬP NHẬP DỰ ÁN</Text>
         </TouchableOpacity>
       </KeyboardAvoidingView>
     );
