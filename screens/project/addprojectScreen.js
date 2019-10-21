@@ -391,6 +391,7 @@ click=()=>{
  <TextInput style={styles.textinput}  onChangeText={(company) => this.setState({company})} value={this.state.company} placeholder='Tên công ty'></TextInput>    
 
 <TextInput style={styles.textinput}  onChangeText={(desire) => this.setState({desire})} value={this.state.desire} placeholder='Mong muốn'></TextInput>
+<TextInput style={styles.textinput}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
 
 </View>
        
@@ -471,8 +472,7 @@ click=()=>{
    borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{this.state.enddate+' '+this.state.endtime}</Text>
 
        </View>
-  <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
-
+ 
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.addAll} style={styles.containerview} >

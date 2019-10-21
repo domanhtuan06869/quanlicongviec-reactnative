@@ -1,94 +1,54 @@
-import React, { Component } from "react";
-import {
-  View,
-  Text,
-  Button,
-  Alert,
-  ProgressBarAndroid,
-  ToastAndroid,
-  PermissionsAndroid
-} from "react-native";
-
-
-export default class componentName extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      progress: 0,
-      loading: false
-    };
-  }
-
-  actualDownload = () => {
-    this.setState({
-      progress: 0,
-      loading: true
-    });
-    let dirs = RNFetchBlob.fs.dirs;
-    RNFetchBlob.config({
-      // add this option that makes response data to be stored as a file,
-      // this is much more performant.
-      path: dirs.DownloadDir + "/path-to-file.png",
-      fileCache: true
-    })
-      .fetch(
-        "GET",
-        "http://www.usa-essays.com/blog/wp-content/uploads/2017/09/sample-5-1024x768.jpg",
-        {
-          //some headers ..
-        }
-      )
-      .progress((received, total) => {
-        console.log("progress", received / total);
-        this.setState({ progress: received / total });
-      })
-      .then(res => {
-        this.setState({
-          progress: 100,
-          loading: false
-        });
-        ToastAndroid.showWithGravity(
-          "Your file has been downloaded to downloads folder!",
-          ToastAndroid.SHORT,
-          ToastAndroid.BOTTOM
-        );
-      });
+import * as React from 'react';
+import { Button, Image, View } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
+import Constants from 'expo-constants';
+import * as Permissions from 'expo-permissions';
+import * as FileSystem from 'expo-file-system';
+export default class ImagePickerExample extends React.Component {
+  state = {
+    image: null,
   };
 
-  async downloadFile() {
-    try {
-      const granted = await PermissionsAndroid.request(
-        PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        {
-          title: "Storage Permission",
-          message: "App needs access to memory to download the file "
-        }
-      );
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
-        this.actualDownload();
-      } else {
-        Alert.alert(
-          "Permission Denied!",
-          "You need to give storage permission to download the file"
-        );
-      }
-    } catch (err) {
-      console.warn(err);
-    }
-  }
   render() {
+    let { image } = this.state;
+
     return (
-      <View>
-        <Text> Download Files in Android </Text>
-        <Button onPress={() => this.downloadFile()} title="Download" />
-        {this.state.loading ? (
-          <ProgressBarAndroid
-            styleAttr="Large"
-            indeterminate={false}
-            progress={this.state.progress}
-          />
-        ) : null}
+      <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <Button
+          title="Pick an image from camera roll"
+          onPress={this._pickImage}
+        />
+        {image &&
+          <Image source={{ uri: image }} style={{ width: 200, height: 200 }} />}
       </View>
     );
   }
+
+  componentDidMount() {
+    this.getPermissionAsync();
+  }
+
+  getPermissionAsync = async () => {
+    if (Constants.platform.ios) {
+      const { status } = await Permissions.askAsync(Permissions.CAMERA_ROLL);
+      if (status !== 'granted') {
+        alert('Sorry, we need camera roll permissions to make this work!');
+      }
+    }
+  }
+
+  _pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.All,
+      allowsEditing: true,
+      base64:true,
+      aspect: [4, 3],
+    });
+
+   
+console.log(result.base64)
+    if (!result.cancelled) {
+      this.setState({ image:'data:image/jpg;base64,'+ result.base64});
+    }
+  };
 }

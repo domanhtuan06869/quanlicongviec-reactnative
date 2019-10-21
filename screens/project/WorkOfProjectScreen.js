@@ -198,70 +198,6 @@ this.showDateTimePicker3()
 
 
 
-  ///Tạo mới 1 cv moi
-/*creatework= async()=>{
- 
-   var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
-    var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
-    var emailArray = this.state.tagsSelected.map(function (obj) {
-      return obj.email;
-    });
-    var tokenArray = this.state.tagsSelected.map(function (obj) {
-      return obj.token;
-    });
-   setTimeout(() => {
-    this.setState({load:false})
-   }, 5000);
-  this.setState({load:true})
-  let email = await SecureStore.getItemAsync('email');
-  let details = {
-
-    name:this.state.name,
-    email:email,
-    emailtag:emailArray,
-    target:this.state.target,
-    status:this.state.status,
-    description:this.state.description,
-    idproject:idproject,
-    nameproject:nameproject,
-    starttime:this.state.startdate+' '+this.state.starttime,
-    endtime:this.state.enddate+' '+this.state.endtime,
-    id:this.state.id,
-    token:tokenArray
-   
-  }
-  let formBody = [];
-  for (let property in details) {
-    let encodedKey = encodeURIComponent(property);
-    let encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
-  fetch( url.url+'/work/insertwork' /*'https://project-tuan.herokuapp.com/work', {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  },
-  body: formBody,
-  }).then((response) =>response.text()
- 
-  )
-  .then((responseData) => {
-//  console.log(responseData)
-  if(responseData==='err'){
-  
-    alert('có lỗi')
-  }else{
-    this.setState({load:false})
-    this.props.navigation.push('ProjectDetail',{id:idproject,nameproject:nameproject})
-  }
-  
-
- 
-  })
-  .catch((err) => { console.log(err); });
-}*/
-
 creatework=async()=>{
   var idproject= this.props.navigation.getParam('idproject', 'NO-NAME')
   var nameproject=  this.props.navigation.getParam('nameproject', 'NO-NAME')
@@ -345,6 +281,7 @@ componentDidMount(){
 <TextInput  style={styles.textinput} onChangeText={(name) => this.setState({name})} value={this.state.name} placeholder='Tên công việc'></TextInput>  
 
  <TextInput style={styles.textinput}  onChangeText={(target) => this.setState({target})} value={this.state.target} placeholder='Mục tiêu công việc'></TextInput>    
+ <TextInput style={styles.textinput}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='description'></TextInput>
 
 
 </View>
@@ -359,7 +296,7 @@ componentDidMount(){
             handleAddition={this.handleAddition}
             handleDelete={this.handleDelete}
             //optional
-            placeholder="Add a contact.."
+            placeholder="Add a email.."
             filterData={this.customFilterData}
             renderSuggestion={this.customRenderSuggestion}
             renderTags={this.customRenderTags}
@@ -428,8 +365,6 @@ componentDidMount(){
 
        </View>
        
-  <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='description'></TextInput>
-
       </View>
       </ScrollView>
       <TouchableOpacity onPress={this.creatework} style={styles.containerview} >

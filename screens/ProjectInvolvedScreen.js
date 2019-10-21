@@ -28,7 +28,7 @@ async function getProject(){
     url.url+'/project/getprojectlienquan?email='+email,
   );
  console.log(result.data)
-  console.log(email)
+
  // setListproject(result.data)
  setListproject(result.data)
   
@@ -95,7 +95,7 @@ props.navigation.navigate('ProjectDetail',{id:id})
             renderItem={({ item }) => (
               <View style={{backgroundColor:'#fff',marginTop:1,height: 68}}>
                 <TouchableOpacity style={{height:'100%',alignItems:'center',justifyContent:'center',backgroundColor:'#fff'}} onPress={()=>{
-                  toSreenDetail(item.id)
+                  toSreenDetail(item.idduan)
                 }}
                 
                 >

@@ -187,7 +187,7 @@ const Detail = (props) => (
       <Text style={{color:'#36D86E',marginLeft:8,textAlignVertical:'center',paddingTop:3,fontSize:16}}>{props.status}</Text>  
       </View>
       <View  style={{width:'60%',height:'100%',flexDirection:'row',alignItems:'center'}}>
-      <Image source={{uri:'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADMAAAAzCAYAAAA6oTAqAAAAEXRFWHRTb2Z0d2FyZQBwbmdjcnVzaEB1SfMAAABQSURBVGje7dSxCQBACARB+2/ab8BEeQNhFi6WSYzYLYudDQYGBgYGBgYGBgYGBgYGBgZmcvDqYGBgmhivGQYGBgYGBgYGBgYGBgYGBgbmQw+P/eMrC5UTVAAAAABJRU5ErkJggg=='}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
+      <Image source={{uri:props.avatar}} style={{width:50,height:50,borderRadius:Platform.OS==='ios'?25:45,marginLeft:10}}/>
         <View style={{height:'100%',flexDirection:'column',alignItems:'center',justifyContent:'center'}}>
           <Text style={{color:'gray'}}>người tạo</Text>
           <Text style={{fontSize:16}}>{props.email}</Text>
@@ -268,7 +268,8 @@ export default class TabChartScreen extends React.Component {
       end:'',
       status:'',
       description:'',
-      emailtag:null
+      emailtag:null,
+      avatar:''
 
     };
  deleteemail= async(email) =>{
@@ -315,6 +316,11 @@ export default class TabChartScreen extends React.Component {
         );
     
         this.setState({nameproject:result.data.tenduan,start:result.data.starttime,status:result.data.trangthai,desire:result.data.mongmuon,description:result.data.mota,email:result.data.email})
+        const result1 = await axios(
+          url.url+'/users/getuseravatar?email='+result.data.email
+           );
+           this.setState({avatar:result1.data.avatar})
+
       }
 
 
@@ -350,7 +356,7 @@ setTimeout(() => {
    
         } navigate={this.props.navigation} idproject={this.state.idproject} nameproject={this.state.nameproject}/>,
           Menber:()=> <Menber delete={this.deleteemail} itemmenber={this.state.itemmenber} nameproject={this.state.nameproject} idproject={this.state.idproject}/>,
-          Detail:()=><Detail  nameproject={this.state.nameproject}  desire={this.state.desire} start={this.state.start} end={this.state.end} status={this.state.status} description={this.state.description} email={this.state.email} />,
+          Detail:()=><Detail  nameproject={this.state.nameproject}  desire={this.state.desire} start={this.state.start} end={this.state.end} status={this.state.status} description={this.state.description} email={this.state.email} avatar={this.state.avatar}/>,
       
         })}
         onIndexChange={index => {this.setState({index})}}

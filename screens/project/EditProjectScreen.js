@@ -15,7 +15,7 @@ import url from '../url'
 import AutoTags from 'react-native-tag-autocomplete';
 
 
-export default class addprojectScreen extends React.Component {
+export default class EditprojectScreen extends React.Component {
   
   static navigationOptions = ({ navigation }) => ({
     header:(
@@ -25,7 +25,7 @@ export default class addprojectScreen extends React.Component {
       paddingVertical:10,
       paddingHorizontal:20,}}>
           <Ionicons onPress={()=>{navigation.goBack()}} color={'white'} size={Platform.OS==='ios'?40:35} name={Platform.OS=='ios'?'ios-arrow-back':'md-arrow-back'}/>
-          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Thêm dự án</Text>
+          <Text style={{fontSize:20,marginTop:5,color:'white',}}>Cập nhập  dự án</Text>
           <Ionicons style={{marginTop:5}} size={30} color={'white'} name={Platform.OS=='ios'?'ios-search':'md-search'}/>
       </View>
     ),
@@ -145,9 +145,22 @@ export default class addprojectScreen extends React.Component {
 
 
   handleDatePicked = date => {
-  
- var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
-    this.setState({startdate:newtime})
+    var month=date.getMonth()+1
+    var day = date.getDate()
+   var newtime;
+   if(day<10 & month<10){
+     newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-0'+date.getDate()
+   }else if (day<10){
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()
+
+ }else if(month<10){
+   newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-'+date.getDate()
+ }
+ else{
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+
+ }
+   this.setState({startdate:newtime})
     this.hideDateTimePicker()
     setTimeout(()=>{
 this.showDateTimePicker3()
@@ -155,7 +168,18 @@ this.showDateTimePicker3()
     
   };
   handleDatePicked2 = date => {
-    var newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+    var month=date.getMonth()+1
+    var day = date.getDate()
+    var newtime;
+   if(day<10 & month<10){
+     newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-0'+date.getDate()
+   }else if (day<10){
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-0'+date.getDate()
+   }else if(month<10){
+   newtime=''+date.getFullYear()+'-0'+(date.getMonth()+1)+'-'+date.getDate()
+ } else{
+   newtime=''+date.getFullYear()+'-'+(date.getMonth()+1)+'-'+date.getDate()
+} 
     this.setState({enddate:newtime})
     this.hideDateTimePicker2();
     setTimeout(()=>{
@@ -165,7 +189,28 @@ this.showDateTimePicker3()
   };
 
   handleDatePicked3 = date => {
-    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    var hours=date.getHours()
+    var min=date.getMinutes()
+    var sc=date.getSeconds()
+    var newtime;
+    if(hours<10 & min<10 & sc<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10 & min<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if( min<10 & sc<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours <10 & sc<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }else if(min<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if(sc<10){
+      newtime=''+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else{
+      newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }
+    
     this.setState({starttime:newtime})
   
     this.hideDateTimePicker3();
@@ -188,7 +233,27 @@ this.showDateTimePicker3()
     this.setState({ isDateTimePickerVisible4: false });
   };
   handleDatePicked4 = date => {
-    var newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    var hours=date.getHours()
+    var min=date.getMinutes()
+    var sc=date.getSeconds()
+    var newtime;
+    if(hours<10 & min<10 & sc<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10 & min<10){
+     newtime='0'+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if( min<10 & sc<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours <10 & sc<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else if(hours<10){
+      newtime='0'+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }else if(min<10){
+      newtime=''+date.getHours()+':0'+date.getMinutes()+':'+date.getSeconds()
+    }else if(sc<10){
+      newtime=''+date.getHours()+':'+date.getMinutes()+':0'+date.getSeconds()
+    }else{
+      newtime=''+date.getHours()+':'+date.getMinutes()+':'+date.getSeconds()
+    }
     this.setState({endtime:newtime})
   
     this.hideDateTimePicker4();
@@ -207,7 +272,8 @@ async createproject(){
     return obj.token;
   });
   let email = await SecureStore.getItemAsync('email');
-  let details = {
+
+   const postData = {                                
     name:this.state.name,
     email:email,
     emailtag:arrayEmail,
@@ -220,30 +286,39 @@ async createproject(){
     id:this.state.id,
     token:arrayToken
 
-  }
-  let formBody = [];
-  for (let property in details) {
-    let encodedKey = encodeURIComponent(property);
-    let encodedValue = encodeURIComponent(details[property]);
-    formBody.push(encodedKey + "=" + encodedValue);
-  }
-  formBody = formBody.join("&");
-  fetch(  url.url+'/project/updateprojectsql' , {
-  method: 'POST',
-  headers: {
-    'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
-  },
-  body: formBody,
-  }).then((response) => response.text())
-  .then((responseData) => {
-    this.setState({load:false})
-    this.props.navigation.push('Home') 
-  })
-  .catch((err) => {
-    if(err){
-      alert('lỗi')
+     };
+  let axiosConfig = {
+    headers: {
+      'Content-Type' : 'application/json; charset=UTF-8',
+
     }
-   });
+  };
+  
+ axios({
+         method: 'post',
+        url:  url.url+'/project/updateprojectsql' ,
+        headers: axiosConfig,
+        data: postData
+    })
+    .then((res) => {
+  
+      if(res.data.originalError){
+        console.log(res.data.originalError)
+        setTimeout(() => {
+          this.setState({load:false})
+         }, 5000);
+         setTimeout(() => {
+          Alert.alert('Có lỗi kiểm tra lại')
+         }, 5500);
+      }else{
+        this.setState({load:false})
+        this.props.navigation.push('Home')
+      }
+ 
+    }).catch(err=>{
+      console.log(err)
+    })
+
 }
 
 
@@ -305,6 +380,7 @@ async getMenberProject(){
  <TextInput style={styles.textinput}  onChangeText={(company) => this.setState({company})} value={this.state.company} placeholder='Tên công ty'></TextInput>    
 
 <TextInput style={styles.textinput}  onChangeText={(desire) => this.setState({desire})} value={this.state.desire} placeholder='Mong muốn'></TextInput>
+<TextInput style={styles.textinput}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
 
 </View>
        
@@ -383,7 +459,6 @@ async getMenberProject(){
    borderWidth: 1, height: 40,borderRadius:4,marginHorizontal:3,}}>{this.state.enddate+' '+this.state.endtime}</Text>
 
        </View>
-  <TextInput style={styles.textinputdescription}  onChangeText={(description) => this.setState({description})} value={this.state.description} placeholder='Mô tả'></TextInput>
 
       </View>
       </ScrollView>
